@@ -1,0 +1,8 @@
+[
+  { "studentId": 1001, "questionId": "english-core-1", "answeredCount": 5, "wrongCount": 3 },
+  { "studentId": 1001, "questionId": "english-core-2", "answeredCount": 4, "wrongCount": 2 },
+  { "studentId": 1001, "questionId": "politics-basic-1", "answeredCount": 6, "wrongCount": 4 },
+  { "studentId": 1001, "questionId": "politics-advanced-1", "answeredCount": 5, "wrongCount": 2 },
+  { "studentId": 1001, "questionId": "fund-subject-1-2", "answeredCount": 3, "wrongCount": 2 },
+  { "studentId": 1001, "questionId": "teacher-comprehensive-2", "answeredCount": 4, "wrongCount": 3 }
+]

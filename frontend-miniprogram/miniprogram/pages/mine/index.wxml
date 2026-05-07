@@ -1,0 +1,33 @@
+<view class="page-shell page-shell-tabbed mine-page">
+  <view class="home-header">
+    <view class="home-user">
+      <view class="avatar-circle">{{avatarText}}</view>
+      <view class="home-name font-title">{{user.displayName}}</view>
+    </view>
+    <button class="ghost-button" bindtap="handleOpenWrongBook">我的错题本</button>
+  </view>
+
+  <view class="status-grid">
+    <view class="surface-card status-card" bindtap="handleOpenQuestionBank">
+      <view class="status-title font-title">在刷题库</view>
+      <view class="status-value content-copy">{{currentQuestionBank}}</view>
+    </view>
+    <view class="surface-card status-card" bindtap="handleOpenRecite">
+      <view class="status-title font-title">在背单词</view>
+      <view class="status-value content-copy">{{currentRecitePlan}}</view>
+    </view>
+  </view>
+
+  <view class="summary-panel">
+    <view class="summary-heading font-title">{{summaryTemplate.title}}</view>
+    <view class="summary-template-name content-copy">{{summaryTemplate.templateName}}</view>
+    <view
+      wx:for="{{summaryTemplate.blocks}}"
+      wx:key="key"
+      class="summary-block"
+    >
+      <view class="summary-block-label font-title">{{item.label}}</view>
+      <view class="summary-block-content content-copy">{{item.content}}</view>
+    </view>
+  </view>
+</view>

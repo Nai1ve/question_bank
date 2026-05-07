@@ -1,0 +1,28 @@
+<view class="login-page">
+  <view class="login-noise"></view>
+  <view class="login-overlay"></view>
+
+  <view class="login-body">
+    <view class="login-topline font-title">登录</view>
+
+    <view class="hero-row">
+      <view>
+        <view class="hero-title font-title">登录</view>
+        <view class="brand-text font-title">「一把过」</view>
+      </view>
+      <view class="mascot-shell">
+        <view class="mascot-head">
+          <view class="eye left-eye"></view>
+          <view class="eye right-eye"></view>
+        </view>
+        <view class="mascot-body">Buff</view>
+      </view>
+    </view>
+
+    <view class="login-copy content-copy">首版仅支持微信登录，完成 mock 闭环后再切真实微信联调。</view>
+
+    <button class="wechat-button" loading="{{loading}}" bindtap="handleWechatLogin">{{loginButtonText}}</button>
+  </view>
+
+  <view class="agreement-text content-copy">登录即代表同意《用户协议》《隐私政策》</view>
+</view>

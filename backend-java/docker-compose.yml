@@ -1,0 +1,49 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: onepass-mysql
+    restart: unless-stopped
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-onepass_practice}
+      MYSQL_USER: ${MYSQL_USER:-onepass}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-onepass123}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-root123}"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./sql/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      - ./sql/reset-student-test-baseline.sql:/docker-entrypoint-initdb.d/03-reset-student-test-baseline.sql:ro
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: onepass-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE:-onepass_practice}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+      DB_USERNAME: ${MYSQL_USER:-onepass}
+      DB_PASSWORD: ${MYSQL_PASSWORD:-onepass123}
+      APP_JWT_SECRET: ${APP_JWT_SECRET:-replace-with-a-long-random-secret}
+      WECHAT_MINI_APP_ID: ${WECHAT_MINI_APP_ID:-replace-me}
+      WECHAT_MINI_APP_SECRET: ${WECHAT_MINI_APP_SECRET:-replace-me}
+      APP_MOCK_ENABLED: ${APP_MOCK_ENABLED:-false}
+
+volumes:
+  mysql-data:

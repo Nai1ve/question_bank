@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.recite.persistence.ReciteDayRecordMapper">
+
+    <resultMap id="ReciteDayRecordMap" type="com.onepass.practice.recite.persistence.ReciteDayRecordDO">
+        <id property="id" column="id"/>
+        <result property="planDayId" column="plan_day_id"/>
+        <result property="planId" column="plan_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="bookName" column="book_name"/>
+        <result property="dayLabel" column="day_label"/>
+        <result property="mode" column="mode"/>
+        <result property="totalCount" column="total_count"/>
+        <result property="correctCount" column="correct_count"/>
+        <result property="wrongCount" column="wrong_count"/>
+        <result property="accuracy" column="accuracy"/>
+        <result property="answersJson" column="answers_json"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO recite_day_record (
+            plan_day_id,
+            plan_id,
+            student_id,
+            book_name,
+            day_label,
+            mode,
+            total_count,
+            correct_count,
+            wrong_count,
+            accuracy,
+            answers_json
+        ) VALUES (
+            #{planDayId},
+            #{planId},
+            #{studentId},
+            #{bookName},
+            #{dayLabel},
+            #{mode},
+            #{totalCount},
+            #{correctCount},
+            #{wrongCount},
+            #{accuracy},
+            #{answersJson}
+        )
+    </insert>
+
+    <select id="selectByIdAndStudentId" resultMap="ReciteDayRecordMap">
+        SELECT
+            id,
+            plan_day_id,
+            plan_id,
+            student_id,
+            book_name,
+            day_label,
+            mode,
+            total_count,
+            correct_count,
+            wrong_count,
+            accuracy,
+            answers_json,
+            created_at
+        FROM recite_day_record
+        WHERE id = #{id}
+          AND student_id = #{studentId}
+        LIMIT 1
+    </select>
+
+    <select id="selectLatestByPlanDayIdAndStudentId" resultMap="ReciteDayRecordMap">
+        SELECT
+            id,
+            plan_day_id,
+            plan_id,
+            student_id,
+            book_name,
+            day_label,
+            mode,
+            total_count,
+            correct_count,
+            wrong_count,
+            accuracy,
+            answers_json,
+            created_at
+        FROM recite_day_record
+        WHERE plan_day_id = #{planDayId}
+          AND student_id = #{studentId}
+        ORDER BY created_at DESC, id DESC
+        LIMIT 1
+    </select>
+</mapper>

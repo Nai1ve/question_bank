@@ -1,0 +1,56 @@
+<view class="page-shell session-page">
+  <view class="custom-nav">
+    <view class="back-button" bindtap="handleBack">‹</view>
+    <view class="nav-title">刷题练习</view>
+  </view>
+
+  <view class="surface-card session-meta">
+    <view class="meta-row">
+      <view class="meta-title font-title">{{categoryName}}</view>
+      <view class="entry-badge">{{entryTypeLabel}}</view>
+    </view>
+    <view class="meta-subtitle content-copy">{{feedbackModeLabel}}</view>
+    <view class="progress-row">
+      <view class="progress-track">
+        <view class="progress-fill" style="width: {{progressPercent}}%;"></view>
+      </view>
+      <view class="progress-text">{{progressText}}</view>
+    </view>
+  </view>
+
+  <view wx:if="{{currentQuestion}}" class="surface-card question-card">
+    <view class="question-header">
+      <view class="question-type-block">
+        <view class="question-type">{{currentQuestion.typeLabel}}</view>
+        <view class="question-hint content-copy">{{currentQuestion.questionHint}}</view>
+      </view>
+      <view class="question-tags">
+        <text wx:for="{{currentQuestion.tags}}" wx:key="*this" class="tag-pill">{{item}}</text>
+      </view>
+    </view>
+
+    <view class="question-stem content-copy">{{currentQuestion.stem}}</view>
+
+    <view class="option-list">
+      <view
+        wx:for="{{currentQuestion.optionItems}}"
+        wx:key="key"
+        class="{{item.itemClassName}}"
+        data-key="{{item.key}}"
+        bindtap="handleTapOption"
+      >
+        <view class="{{item.keyClassName}}">{{item.key}}</view>
+        <view class="option-content content-copy">{{item.content}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{feedbackVisible && feedbackResult}}" class="surface-card feedback-card">
+    <view class="{{feedbackResult.titleClassName}}">{{feedbackResult.title}}</view>
+    <view class="feedback-line content-copy">你的答案：{{feedbackResult.userAnswer}}</view>
+    <view class="feedback-line content-copy">标准答案：{{feedbackResult.standardAnswer}}</view>
+    <view class="feedback-analysis content-copy">{{feedbackResult.analysis}}</view>
+  </view>
+
+  <button class="primary-button primary-action" bindtap="handlePrimaryAction">{{primaryButtonText}}</button>
+</view>

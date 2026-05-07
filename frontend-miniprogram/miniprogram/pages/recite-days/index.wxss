@@ -1,0 +1,62 @@
+.recite-days-page {
+  background: linear-gradient(180deg, #f6f7f4 0%, #eef2f7 100%);
+}
+
+.plan-summary {
+  padding: 30rpx;
+  margin-bottom: 28rpx;
+}
+
+.plan-name {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 12rpx;
+}
+
+.day-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.day-card {
+  padding: 28rpx;
+}
+
+.day-card-completed {
+  border: 2rpx solid #d6deea;
+}
+
+.day-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14rpx;
+}
+
+.day-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #111111;
+}
+
+.day-status {
+  font-size: 24rpx;
+  color: #6c7787;
+  font-family: "DengXian", "FangSong", "KaiTi", serif;
+}
+
+.day-meta {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #536070;
+}
+
+.day-action {
+  margin-top: 18rpx;
+  font-size: 24rpx;
+  line-height: 1.5;
+  color: #1f4c8f;
+  font-family: "DengXian", "FangSong", "KaiTi", serif;
+}

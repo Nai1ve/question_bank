@@ -1,0 +1,82 @@
+.recite-plan-page {
+  background: linear-gradient(180deg, #f6f7f4 0%, #eef2f7 100%);
+}
+
+.current-plan-card,
+.book-card {
+  padding: 30rpx;
+}
+
+.current-plan-card {
+  margin-bottom: 28rpx;
+}
+
+.card-title {
+  font-size: 26rpx;
+  color: #7d8796;
+  margin-bottom: 10rpx;
+}
+
+.current-plan-name,
+.book-name {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #111111;
+}
+
+.card-button {
+  margin-top: 22rpx;
+}
+
+.book-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-top: 24rpx;
+}
+
+.book-card {
+  border: 2rpx solid transparent;
+}
+
+.book-card-active {
+  border-color: #263445;
+  box-shadow: 0 18rpx 44rpx rgba(17, 24, 39, 0.1);
+}
+
+.book-description {
+  margin: 12rpx 0 14rpx;
+  font-size: 26rpx;
+  color: #576170;
+}
+
+.plan-heading {
+  margin-top: 34rpx;
+}
+
+.filter-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18rpx;
+  margin: 22rpx 0 34rpx;
+}
+
+.filter-chip {
+  min-width: 160rpx;
+  padding: 20rpx 24rpx;
+  border-radius: 999rpx;
+  background: #ffffff;
+  color: #566273;
+  font-size: 26rpx;
+  text-align: center;
+  box-shadow: 0 12rpx 28rpx rgba(17, 24, 39, 0.05);
+}
+
+.filter-chip-active {
+  background: #1f2d3d;
+  color: #ffffff;
+}
+
+.recite-plan-primary {
+  margin-bottom: calc(env(safe-area-inset-bottom) + 10rpx);
+}

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.recite.persistence.RecitePlanDayMapper">
+
+    <resultMap id="RecitePlanDayMap" type="com.onepass.practice.recite.persistence.RecitePlanDayDO">
+        <id property="id" column="id"/>
+        <result property="planId" column="plan_id"/>
+        <result property="dayNumber" column="day_number"/>
+        <result property="dayLabel" column="day_label"/>
+        <result property="startWordOrder" column="start_word_order"/>
+        <result property="endWordOrder" column="end_word_order"/>
+        <result property="totalCount" column="total_count"/>
+        <result property="status" column="status"/>
+        <result property="studyCompletedAt" column="study_completed_at"/>
+        <result property="lastAccuracy" column="last_accuracy"/>
+        <result property="lastCorrectCount" column="last_correct_count"/>
+        <result property="lastWrongCount" column="last_wrong_count"/>
+        <result property="completedAt" column="completed_at"/>
+    </resultMap>
+
+    <select id="selectByPlanId" resultMap="RecitePlanDayMap">
+        SELECT
+            id,
+            plan_id,
+            day_number,
+            day_label,
+            start_word_order,
+            end_word_order,
+            total_count,
+            status,
+            study_completed_at,
+            last_accuracy,
+            last_correct_count,
+            last_wrong_count,
+            completed_at
+        FROM recite_plan_day
+        WHERE plan_id = #{planId}
+        ORDER BY day_number ASC
+    </select>
+
+    <select id="selectByPlanIdAndDayNumber" resultMap="RecitePlanDayMap">
+        SELECT
+            id,
+            plan_id,
+            day_number,
+            day_label,
+            start_word_order,
+            end_word_order,
+            total_count,
+            status,
+            study_completed_at,
+            last_accuracy,
+            last_correct_count,
+            last_wrong_count,
+            completed_at
+        FROM recite_plan_day
+        WHERE plan_id = #{planId}
+          AND day_number = #{dayNumber}
+        LIMIT 1
+    </select>
+
+    <select id="countCompletedDays" resultType="int">
+        SELECT COUNT(*)
+        FROM recite_plan_day
+        WHERE plan_id = #{planId}
+          AND status = 'COMPLETED'
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO recite_plan_day (
+            plan_id,
+            day_number,
+            day_label,
+            start_word_order,
+            end_word_order,
+            total_count,
+            status,
+            study_completed_at,
+            last_accuracy,
+            last_correct_count,
+            last_wrong_count,
+            completed_at
+        ) VALUES (
+            #{planId},
+            #{dayNumber},
+            #{dayLabel},
+            #{startWordOrder},
+            #{endWordOrder},
+            #{totalCount},
+            #{status},
+            #{studyCompletedAt},
+            #{lastAccuracy},
+            #{lastCorrectCount},
+            #{lastWrongCount},
+            #{completedAt}
+        )
+    </insert>
+
+    <update id="updateStudyCompletedAt">
+        UPDATE recite_plan_day
+        SET study_completed_at = #{studyCompletedAt}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateCompletion">
+        UPDATE recite_plan_day
+        SET status = #{status},
+            study_completed_at = COALESCE(study_completed_at, #{completedAt}),
+            last_accuracy = #{lastAccuracy},
+            last_correct_count = #{lastCorrectCount},
+            last_wrong_count = #{lastWrongCount},
+            completed_at = #{completedAt}
+        WHERE id = #{id}
+    </update>
+</mapper>

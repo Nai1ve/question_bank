@@ -1,0 +1,40 @@
+.list-page {
+  background: #f7f7f5;
+}
+
+.list-panel {
+  overflow: hidden;
+  padding: 6rpx 24rpx;
+  box-sizing: border-box;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 122rpx;
+  padding: 30rpx 2rpx;
+  border-bottom: 1rpx solid #edf0f4;
+  box-sizing: border-box;
+}
+
+.list-item:last-child {
+  border-bottom: none;
+}
+
+.item-title {
+  font-size: 35rpx;
+  font-weight: 600;
+  color: #272727;
+}
+
+.item-subtitle {
+  margin-top: 10rpx;
+  font-size: 25rpx;
+  color: #afb5be;
+}
+
+.item-arrow {
+  font-size: 40rpx;
+  color: #c1c7cf;
+}

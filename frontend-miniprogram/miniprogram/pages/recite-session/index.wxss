@@ -1,0 +1,53 @@
+.recite-session-page {
+  background: linear-gradient(180deg, #f6f7f4 0%, #eef2f7 100%);
+}
+
+.session-summary {
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+}
+
+.session-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 12rpx;
+}
+
+.entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+  margin-bottom: 28rpx;
+}
+
+.entry-card {
+  padding: 26rpx;
+}
+
+.entry-prompt {
+  font-size: 30rpx;
+  color: #111111;
+  font-weight: 600;
+}
+
+.entry-pos {
+  margin-top: 10rpx;
+  font-size: 22rpx;
+  color: #8c93a1;
+}
+
+.entry-input {
+  margin-top: 18rpx;
+  height: 82rpx;
+  border-radius: 22rpx;
+  background: #f6f7fb;
+  padding: 0 24rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  color: #111111;
+}
+
+.recite-session-submit {
+  margin-bottom: calc(env(safe-area-inset-bottom) + 10rpx);
+}

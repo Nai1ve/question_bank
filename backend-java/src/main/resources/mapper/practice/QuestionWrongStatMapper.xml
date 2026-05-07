@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.practice.persistence.QuestionWrongStatMapper">
+
+    <resultMap id="QuestionWrongStatMap" type="com.onepass.practice.practice.persistence.QuestionWrongStatDO">
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="answeredCount" column="answered_count"/>
+        <result property="wrongCount" column="wrong_count"/>
+        <result property="lastAnsweredAt" column="last_answered_at"/>
+        <result property="lastWrongAt" column="last_wrong_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <resultMap id="WrongBookQuestionRowMap" type="com.onepass.practice.practice.persistence.WrongBookQuestionRowDO">
+        <result property="questionId" column="question_id"/>
+        <result property="stem" column="stem"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="wrongCount" column="wrong_count"/>
+        <result property="answeredCount" column="answered_count"/>
+        <result property="tags" column="tags"/>
+    </resultMap>
+
+    <select id="selectByStudentAndQuestion" resultMap="QuestionWrongStatMap">
+        SELECT *
+        FROM question_wrong_stat
+        WHERE student_id = #{studentId}
+          AND question_id = #{questionId}
+    </select>
+
+    <select id="selectByStudentAndQuestionIds" resultMap="QuestionWrongStatMap">
+        SELECT *
+        FROM question_wrong_stat
+        WHERE student_id = #{studentId}
+          AND question_id IN
+          <foreach collection="questionIds" item="questionId" open="(" separator="," close=")">
+              #{questionId}
+          </foreach>
+    </select>
+
+    <select id="selectTopWrongQuestions" resultMap="WrongBookQuestionRowMap">
+        SELECT
+            qws.question_id,
+            q.stem,
+            c.name AS category_name,
+            qws.wrong_count,
+            qws.answered_count,
+            GROUP_CONCAT(qt.tag_name ORDER BY qt.sort_order ASC SEPARATOR '||') AS tags
+        FROM question_wrong_stat qws
+        INNER JOIN question q ON q.id = qws.question_id
+        INNER JOIN category c ON c.id = q.category_id
+        LEFT JOIN question_tag qt ON qt.question_id = q.id
+        WHERE qws.student_id = #{studentId}
+          AND qws.wrong_count > 0
+        GROUP BY qws.question_id, q.stem, c.name, qws.wrong_count, qws.answered_count
+        ORDER BY qws.wrong_count DESC, qws.answered_count DESC, qws.question_id ASC
+        LIMIT #{limit}
+    </select>
+
+    <insert id="upsertIncrement">
+        INSERT INTO question_wrong_stat (
+            student_id,
+            question_id,
+            answered_count,
+            wrong_count,
+            last_answered_at,
+            last_wrong_at,
+            version
+        ) VALUES (
+            #{studentId},
+            #{questionId},
+            #{answeredDelta},
+            #{wrongDelta},
+            #{lastAnsweredAt},
+            #{lastWrongAt},
+            0
+        )
+        ON DUPLICATE KEY UPDATE
+            answered_count = answered_count + #{answeredDelta},
+            wrong_count = wrong_count + #{wrongDelta},
+            last_answered_at = #{lastAnsweredAt},
+            last_wrong_at = CASE
+                WHEN #{wrongDelta} > 0 THEN #{lastWrongAt}
+                ELSE last_wrong_at
+            END,
+            version = version + 1
+    </insert>
+</mapper>

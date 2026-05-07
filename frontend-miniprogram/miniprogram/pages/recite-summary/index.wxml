@@ -1,0 +1,45 @@
+<view class="page-shell recite-summary-page">
+  <view class="custom-nav">
+    <view class="back-button" bindtap="handleBack">‹</view>
+    <view class="nav-title">背诵复盘</view>
+  </view>
+
+  <view wx:if="{{summary}}" class="surface-card summary-card">
+    <view class="summary-title font-title">{{summary.bookName}} · {{summary.dayLabel}}</view>
+    <view class="summary-mode content-copy">{{summary.mode === 'cn_to_en' ? '中译英' : '英译中'}}</view>
+    <view class="summary-metrics">
+      <view class="metric-item">
+        <view class="metric-value">{{summary.totalCount}}</view>
+        <view class="metric-label">总数</view>
+      </view>
+      <view class="metric-item">
+        <view class="metric-value">{{summary.correctCount}}</view>
+        <view class="metric-label">正确</view>
+      </view>
+      <view class="metric-item">
+        <view class="metric-value">{{summary.wrongCount}}</view>
+        <view class="metric-label">错误</view>
+      </view>
+      <view class="metric-item">
+        <view class="metric-value">{{summary.accuracy}}</view>
+        <view class="metric-label">正确率</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="result-list">
+    <view wx:for="{{items}}" wx:key="wordId" class="surface-card result-card">
+      <view class="result-header">
+        <view class="result-prompt content-copy">{{item.prompt}}</view>
+        <view class="result-badge {{item.correct ? 'result-badge-correct' : 'result-badge-wrong'}}">{{item.correct ? '对' : '错'}}</view>
+      </view>
+      <view class="result-meta content-copy">{{item.partOfSpeech}} · 标准：{{item.standardAnswer}}</view>
+      <view class="result-user content-copy">你的答案：{{item.userAnswer || '未填写'}}</view>
+    </view>
+  </view>
+
+  <view class="summary-actions">
+    <button class="ghost-button action-button" bindtap="handleBackToDays">返回 Day 列表</button>
+    <button class="primary-button action-button" bindtap="handleGoHome">回到首页</button>
+  </view>
+</view>

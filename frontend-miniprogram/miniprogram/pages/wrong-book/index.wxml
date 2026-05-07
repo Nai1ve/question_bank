@@ -1,0 +1,23 @@
+<view class="page-shell wrong-book-page">
+  <view class="custom-nav">
+    <view class="back-button" bindtap="handleBack">‹</view>
+    <view class="nav-title">我的错题本</view>
+  </view>
+
+  <view class="surface-card wrong-book-intro">
+    <view class="intro-title font-title">当前高频错题</view>
+    <view class="muted-text content-copy">按累计答错次数排序，先看错得最多的题，再决定是否进入 TopXX 复练。</view>
+    <button class="ghost-button intro-button" bindtap="handleGoTopxx">前往 TopXX</button>
+  </view>
+
+  <view class="wrong-book-list">
+    <view wx:for="{{items}}" wx:key="questionId" class="surface-card wrong-book-card">
+      <view class="wrong-book-category">{{item.categoryName}}</view>
+      <view class="wrong-book-stem content-copy">{{item.stem}}</view>
+      <view class="wrong-book-meta content-copy">累计答错 {{item.wrongCount}} 次 · 已答 {{item.answeredCount}} 次</view>
+      <view class="tag-row">
+        <view wx:for="{{item.tags}}" wx:key="*this" class="tag-chip">{{item}}</view>
+      </view>
+    </view>
+  </view>
+</view>

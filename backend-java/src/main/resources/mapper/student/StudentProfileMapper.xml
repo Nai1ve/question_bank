@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.student.persistence.StudentProfileMapper">
+
+    <resultMap id="StudentProfileMap" type="com.onepass.practice.student.persistence.StudentProfileDO">
+        <id property="id" column="id"/>
+        <result property="displayName" column="display_name"/>
+        <result property="avatarUrl" column="avatar_url"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="StudentProfileMap">
+        SELECT id, display_name, avatar_url
+        FROM student
+        WHERE id = #{id}
+    </select>
+</mapper>

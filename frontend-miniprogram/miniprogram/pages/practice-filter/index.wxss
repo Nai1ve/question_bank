@@ -1,0 +1,49 @@
+.filter-page {
+  background: #f7f7f5;
+}
+
+.intro-card,
+.filter-card {
+  padding: 34rpx 30rpx;
+  margin-bottom: 26rpx;
+}
+
+.intro-title,
+.filter-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #232323;
+}
+
+.intro-copy {
+  margin-top: 14rpx;
+  font-size: 26rpx;
+  line-height: 1.5;
+  color: #677489;
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-top: 26rpx;
+}
+
+.filter-chip {
+  padding: 20rpx 28rpx;
+  border-radius: 999rpx;
+  background: #eef3fb;
+  color: #52647e;
+  font-size: 27rpx;
+  line-height: 1.2;
+}
+
+.filter-chip-active {
+  background: #1f2937;
+  color: #ffffff;
+}
+
+.start-button {
+  margin-top: 28rpx;
+  margin-bottom: calc(env(safe-area-inset-bottom) + 8rpx);
+}

@@ -1,0 +1,77 @@
+<view class="page-shell topxx-page">
+  <view class="custom-nav">
+    <view class="back-button" bindtap="handleBack">‹</view>
+    <view class="nav-title">Top 错题榜</view>
+  </view>
+
+  <view class="surface-card intro-card">
+    <view class="intro-title font-title">错题复练筛选</view>
+    <view class="intro-copy content-copy">按累计答错次数排序，再按榜单范围和分类选择本轮要复练的错题。</view>
+    <view class="selection-badge">当前范围：Top{{activeLimit}} · {{resolvedCategoryName}}</view>
+  </view>
+
+  <view class="surface-card filter-card">
+    <view class="filter-title font-title">榜单范围</view>
+    <view class="filter-options">
+      <view
+        wx:for="{{limitOptions}}"
+        wx:key="value"
+        class="{{item.className}}"
+        data-value="{{item.value}}"
+        bindtap="handleSelectLimit"
+      >
+        {{item.label}}
+      </view>
+    </view>
+  </view>
+
+  <view class="surface-card filter-card">
+    <view class="filter-title font-title">主分类</view>
+    <view class="filter-options">
+      <view
+        wx:for="{{rootCategories}}"
+        wx:key="id"
+        class="{{item.className}}"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+        bindtap="handleSelectRootCategory"
+      >
+        {{item.name}}
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{secondCategories.length}}" class="surface-card filter-card">
+    <view class="filter-title font-title">方向细分</view>
+    <view class="filter-options">
+      <view
+        wx:for="{{secondCategories}}"
+        wx:key="id"
+        class="{{item.className}}"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+        bindtap="handleSelectSecondCategory"
+      >
+        {{item.name}}
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{thirdCategories.length}}" class="surface-card filter-card">
+    <view class="filter-title font-title">小类颗粒</view>
+    <view class="filter-options">
+      <view
+        wx:for="{{thirdCategories}}"
+        wx:key="id"
+        class="{{item.className}}"
+        data-id="{{item.id}}"
+        data-name="{{item.name}}"
+        bindtap="handleSelectThirdCategory"
+      >
+        {{item.name}}
+      </view>
+    </view>
+  </view>
+
+  <button class="primary-button start-button" bindtap="handleStartTopxx">开始复练</button>
+</view>

@@ -1,0 +1,29 @@
+<view class="page-shell recite-days-page">
+  <view class="custom-nav">
+    <view class="back-button" bindtap="handleBack">‹</view>
+    <view class="nav-title">Day 列表</view>
+  </view>
+
+  <view wx:if="{{plan}}" class="surface-card plan-summary">
+    <view class="plan-name font-title">{{plan.bookName}}</view>
+    <view class="muted-text content-copy">每日 {{plan.dailyCount}} 个 · 共 {{plan.totalDays}} 天 · 当前 {{plan.currentDayLabel}}</view>
+  </view>
+
+  <view class="day-list">
+    <view
+      wx:for="{{days}}"
+      wx:key="dayNumber"
+      class="{{item.className}}"
+      data-day-number="{{item.dayNumber}}"
+      bindtap="handleOpenDay"
+    >
+      <view class="day-header">
+        <view class="day-title font-title">{{item.dayLabel}}</view>
+        <view class="day-status">{{item.statusText}}</view>
+      </view>
+      <view class="muted-text content-copy">单词数：{{item.totalCount}} · {{item.statusText}}</view>
+      <view wx:if="{{item.lastAccuracy}}" class="day-meta content-copy">上次正确率：{{item.lastAccuracy}} · 对 {{item.lastCorrectCount}} / 错 {{item.lastWrongCount}}</view>
+      <view class="day-action">{{item.actionText}}</view>
+    </view>
+  </view>
+</view>

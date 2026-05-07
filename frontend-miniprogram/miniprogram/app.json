@@ -1,0 +1,44 @@
+{
+  "pages": [
+    "pages/login/index",
+    "pages/study-home/index",
+    "pages/mine/index",
+    "pages/wrong-book/index",
+    "pages/recite-plan/index",
+    "pages/recite-days/index",
+    "pages/recite-study/index",
+    "pages/recite-session/index",
+    "pages/recite-summary/index",
+    "pages/topxx/index",
+    "pages/practice-filter/index",
+    "pages/practice-session/index",
+    "pages/practice-summary/index",
+    "pages/question-bank-list/index",
+    "pages/question-category-list/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "backgroundColor": "#f7f7f5",
+    "backgroundColorTop": "#f7f7f5",
+    "backgroundColorBottom": "#f7f7f5"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#8b8b8b",
+    "selectedColor": "#111111",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/study-home/index",
+        "text": "学习"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

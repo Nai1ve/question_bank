@@ -1,0 +1,10 @@
+*.log
+.DS_Store
+target/
+node_modules/
+dist/
+.idea/
+.vscode/
+frontend-miniprogram/project.private.config.json
+frontend-miniprogram/miniprogram_npm/
+backend-java/.env

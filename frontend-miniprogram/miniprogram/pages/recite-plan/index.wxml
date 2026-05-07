@@ -1,0 +1,45 @@
+<view class="page-shell recite-plan-page">
+  <view class="custom-nav">
+    <view class="back-button" bindtap="handleBack">‹</view>
+    <view class="nav-title">背诵计划</view>
+  </view>
+
+  <view wx:if="{{activePlan}}" class="surface-card current-plan-card">
+    <view class="card-title content-copy">当前计划</view>
+    <view class="current-plan-name font-title">{{activePlan.bookName}}</view>
+    <view class="muted-text content-copy">当前进度：{{activePlan.currentDayLabel}} · 已完成 {{activePlan.completedDays}} / {{activePlan.totalDays}} 天</view>
+    <button class="ghost-button card-button" bindtap="handleOpenDays">查看 Day 列表</button>
+  </view>
+
+  <view class="section-heading font-title">选择词库</view>
+  <view class="book-grid">
+    <view
+      wx:for="{{books}}"
+      wx:key="id"
+      class="{{item.className}}"
+      data-id="{{item.id}}"
+      bindtap="handleSelectBook"
+    >
+      <view class="book-name font-title">{{item.name}}</view>
+      <view class="book-description content-copy">{{item.description}}</view>
+      <view class="muted-text content-copy">共 {{item.totalWords}} 个单词</view>
+    </view>
+  </view>
+
+  <view class="section-heading font-title plan-heading">每日数量</view>
+  <view class="filter-chip-row">
+    <view
+      wx:for="{{countOptions}}"
+      wx:key="value"
+      class="{{item.className}}"
+      data-value="{{item.value}}"
+      bindtap="handleSelectCount"
+    >
+      {{item.label}}
+    </view>
+  </view>
+
+  <button class="primary-button recite-plan-primary" bindtap="handleCreatePlan">
+    {{activePlan ? '重建背诵计划' : '创建背诵计划'}}
+  </button>
+</view>

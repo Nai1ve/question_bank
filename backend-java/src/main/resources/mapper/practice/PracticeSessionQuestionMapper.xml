@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.practice.persistence.PracticeSessionQuestionMapper">
+
+    <resultMap id="PracticeSessionQuestionMap" type="com.onepass.practice.practice.persistence.PracticeSessionQuestionDO">
+        <id property="id" column="id"/>
+        <result property="sessionId" column="session_id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="questionOrder" column="question_order"/>
+        <result property="questionType" column="question_type"/>
+        <result property="stem" column="stem"/>
+        <result property="tagsJson" column="tags_json"/>
+        <result property="optionsJson" column="options_json"/>
+        <result property="standardAnswerJson" column="standard_answer_json"/>
+        <result property="analysis" column="analysis"/>
+        <result property="userAnswerJson" column="user_answer_json"/>
+        <result property="userAnswerLabel" column="user_answer_label"/>
+        <result property="answerLabel" column="answer_label"/>
+        <result property="submitted" column="submitted"/>
+        <result property="correct" column="correct"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <select id="selectBySessionId" resultMap="PracticeSessionQuestionMap">
+        SELECT *
+        FROM practice_session_question
+        WHERE session_id = #{sessionId}
+        ORDER BY question_order ASC
+    </select>
+
+    <insert id="batchInsert">
+        INSERT INTO practice_session_question (
+            session_id,
+            question_id,
+            question_order,
+            question_type,
+            stem,
+            tags_json,
+            options_json,
+            standard_answer_json,
+            analysis,
+            user_answer_json,
+            user_answer_label,
+            answer_label,
+            submitted,
+            correct,
+            version
+        ) VALUES
+        <foreach collection="items" item="item" separator=",">
+            (
+                #{item.sessionId},
+                #{item.questionId},
+                #{item.questionOrder},
+                #{item.questionType},
+                #{item.stem},
+                #{item.tagsJson},
+                #{item.optionsJson},
+                #{item.standardAnswerJson},
+                #{item.analysis},
+                #{item.userAnswerJson},
+                #{item.userAnswerLabel},
+                #{item.answerLabel},
+                #{item.submitted},
+                #{item.correct},
+                #{item.version}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateAnswerSnapshot">
+        UPDATE practice_session_question
+        SET user_answer_json = #{userAnswerJson},
+            user_answer_label = #{userAnswerLabel},
+            answer_label = #{answerLabel},
+            submitted = #{submitted},
+            correct = #{correct},
+            version = version + 1
+        WHERE session_id = #{sessionId}
+          AND question_id = #{questionId}
+          AND version = #{version}
+    </update>
+</mapper>

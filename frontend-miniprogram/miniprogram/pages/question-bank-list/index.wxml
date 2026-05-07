@@ -1,0 +1,25 @@
+<view class="page-shell list-page">
+  <view class="custom-nav">
+    <view class="back-button" bindtap="handleBack">‹</view>
+    <view class="nav-title">{{title}}</view>
+  </view>
+
+  <view class="surface-card list-panel">
+    <view
+      wx:for="{{categories}}"
+      wx:key="id"
+      class="list-item"
+      data-id="{{item.id}}"
+      data-name="{{item.name}}"
+      data-is-leaf="{{item.isLeaf}}"
+      bindtap="handleOpenCategory"
+    >
+      <view>
+        <view class="item-title">{{item.name}}</view>
+        <view class="item-subtitle">{{item.subtitle}}</view>
+      </view>
+      <view class="item-arrow">›</view>
+    </view>
+  </view>
+</view>
+

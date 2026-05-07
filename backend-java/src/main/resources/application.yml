@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: onepass-practice
+
+server:
+  port: 8080
+
+mybatis:
+  mapper-locations: classpath*:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+app:
+  jwt:
+    issuer: onepass-practice
+    secret: ${APP_JWT_SECRET:dev-only-jwt-secret-dev-only-jwt-secret}
+    expiration-seconds: 604800
+  topxx:
+    default-limit: 20
+    allowed-limits: 20,40,60,80,100
+  practice:
+    session-retention-days: 7
+  wechat:
+    app-id: ${WECHAT_MINI_APP_ID:replace-me}
+    app-secret: ${WECHAT_MINI_APP_SECRET:replace-me}
+  mock:
+    enabled: ${APP_MOCK_ENABLED:true}

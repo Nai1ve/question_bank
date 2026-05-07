@@ -1,0 +1,94 @@
+.mine-page {
+  padding-top: calc(env(safe-area-inset-top) + 96rpx);
+}
+
+.home-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 42rpx;
+}
+
+.home-user {
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+  flex: 1;
+  min-width: 0;
+}
+
+.home-name {
+  font-size: 38rpx;
+  font-weight: 600;
+  color: #1b1b1b;
+}
+
+.ghost-button {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.status-grid {
+  display: flex;
+  gap: 26rpx;
+}
+
+.status-card {
+  flex: 1;
+  min-height: 192rpx;
+  padding: 30rpx;
+  box-sizing: border-box;
+}
+
+.status-title {
+  font-size: 35rpx;
+  font-weight: 600;
+  color: #303030;
+}
+
+.status-value {
+  margin-top: 18rpx;
+  font-size: 25rpx;
+  color: #8b93a0;
+}
+
+.summary-panel {
+  margin-top: 46rpx;
+  min-height: 480rpx;
+  padding: 34rpx 30rpx;
+  border: 1rpx solid #e4e8ef;
+  border-radius: 32rpx;
+  background: #ffffff;
+  box-sizing: border-box;
+  box-shadow: 0 16rpx 42rpx rgba(17, 24, 39, 0.06);
+}
+
+.summary-heading {
+  font-size: 44rpx;
+  font-weight: 600;
+  color: #232323;
+  margin-bottom: 14rpx;
+}
+
+.summary-template-name {
+  margin-bottom: 30rpx;
+  font-size: 25rpx;
+  color: #9ca3af;
+}
+
+.summary-block {
+  padding: 24rpx 0;
+  border-top: 1rpx solid #edf0f4;
+}
+
+.summary-block-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #475467;
+}
+
+.summary-block-content {
+  margin-top: 12rpx;
+  font-size: 28rpx;
+  color: #5d6775;
+}

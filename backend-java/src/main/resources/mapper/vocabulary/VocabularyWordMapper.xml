@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.vocabulary.persistence.VocabularyWordMapper">
+
+    <resultMap id="VocabularyWordMap" type="com.onepass.practice.vocabulary.persistence.VocabularyWordDO">
+        <id property="id" column="id"/>
+        <result property="bookId" column="book_id"/>
+        <result property="english" column="english"/>
+        <result property="chinese" column="chinese"/>
+        <result property="partOfSpeech" column="part_of_speech"/>
+        <result property="sortOrder" column="sort_order"/>
+    </resultMap>
+
+    <select id="selectByBookId" resultMap="VocabularyWordMap">
+        SELECT id, book_id, english, chinese, part_of_speech, sort_order
+        FROM vocabulary_word
+        WHERE book_id = #{bookId}
+          AND status = 1
+        ORDER BY sort_order ASC, id ASC
+    </select>
+
+    <select id="selectByBookIdAndSortRange" resultMap="VocabularyWordMap">
+        SELECT id, book_id, english, chinese, part_of_speech, sort_order
+        FROM vocabulary_word
+        WHERE book_id = #{bookId}
+          AND status = 1
+          AND sort_order &gt;= #{startSortOrder}
+          AND sort_order &lt;= #{endSortOrder}
+        ORDER BY sort_order ASC, id ASC
+    </select>
+</mapper>

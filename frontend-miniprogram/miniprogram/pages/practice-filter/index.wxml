@@ -1,0 +1,58 @@
+<view class="page-shell filter-page">
+  <view class="custom-nav">
+    <view class="back-button" bindtap="handleBack">‹</view>
+    <view class="nav-title">刷题筛选</view>
+  </view>
+
+  <view class="surface-card intro-card">
+    <view class="intro-title font-title">{{categoryName}}</view>
+    <view class="intro-copy content-copy">先选择本轮刷题题量和反馈模式，后续这里会继续补全真实标签与题目统计。</view>
+  </view>
+
+  <view class="surface-card filter-card">
+    <view class="filter-title font-title">题量</view>
+    <view class="filter-options">
+      <view
+        wx:for="{{countOptions}}"
+        wx:key="value"
+        class="{{item.className}}"
+        data-value="{{item.value}}"
+        bindtap="handleSelectCount"
+      >
+        {{item.label}}
+      </view>
+    </view>
+  </view>
+
+  <view class="surface-card filter-card">
+    <view class="filter-title font-title">反馈模式</view>
+    <view class="filter-options">
+      <view
+        wx:for="{{modeOptions}}"
+        wx:key="value"
+        class="{{item.className}}"
+        data-value="{{item.value}}"
+        bindtap="handleSelectMode"
+      >
+        {{item.label}}
+      </view>
+    </view>
+  </view>
+
+  <view class="surface-card filter-card">
+    <view class="filter-title font-title">标签</view>
+    <view class="filter-options">
+      <view
+        wx:for="{{tagOptions}}"
+        wx:key="value"
+        class="{{item.className}}"
+        data-value="{{item.value}}"
+        bindtap="handleToggleTag"
+      >
+        {{item.label}}
+      </view>
+    </view>
+  </view>
+
+  <button class="primary-button start-button" bindtap="handleStartPractice">开始刷题</button>
+</view>

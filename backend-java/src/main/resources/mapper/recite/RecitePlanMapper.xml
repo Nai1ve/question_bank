@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.recite.persistence.RecitePlanMapper">
+
+    <resultMap id="RecitePlanMap" type="com.onepass.practice.recite.persistence.RecitePlanDO">
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="bookId" column="book_id"/>
+        <result property="bookName" column="book_name"/>
+        <result property="dailyCount" column="daily_count"/>
+        <result property="totalWords" column="total_words"/>
+        <result property="totalDays" column="total_days"/>
+        <result property="status" column="status"/>
+        <result property="supersededAt" column="superseded_at"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <select id="selectActiveByStudentId" resultMap="RecitePlanMap">
+        SELECT id, student_id, book_id, book_name, daily_count, total_words, total_days, status, superseded_at, created_at
+        FROM recite_plan
+        WHERE student_id = #{studentId}
+          AND status = 'ACTIVE'
+        ORDER BY created_at DESC, id DESC
+        LIMIT 1
+    </select>
+
+    <select id="selectByIdAndStudentId" resultMap="RecitePlanMap">
+        SELECT id, student_id, book_id, book_name, daily_count, total_words, total_days, status, superseded_at, created_at
+        FROM recite_plan
+        WHERE id = #{id}
+          AND student_id = #{studentId}
+        LIMIT 1
+    </select>
+
+    <update id="supersedeActivePlans">
+        UPDATE recite_plan
+        SET status = 'SUPERSEDED',
+            superseded_at = #{supersededAt}
+        WHERE student_id = #{studentId}
+          AND status = 'ACTIVE'
+    </update>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO recite_plan (
+            student_id,
+            book_id,
+            book_name,
+            daily_count,
+            total_words,
+            total_days,
+            status,
+            superseded_at
+        ) VALUES (
+            #{studentId},
+            #{bookId},
+            #{bookName},
+            #{dailyCount},
+            #{totalWords},
+            #{totalDays},
+            #{status},
+            #{supersededAt}
+        )
+    </insert>
+</mapper>

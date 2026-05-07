@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.vocabulary.persistence.VocabularyBookMapper">
+
+    <resultMap id="VocabularyBookMap" type="com.onepass.practice.vocabulary.persistence.VocabularyBookDO">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="totalWords" column="total_words"/>
+    </resultMap>
+
+    <select id="selectActiveBooks" resultMap="VocabularyBookMap">
+        SELECT
+            vb.id,
+            vb.name,
+            vb.description,
+            COUNT(vw.id) AS total_words
+        FROM vocabulary_book vb
+        LEFT JOIN vocabulary_word vw
+            ON vw.book_id = vb.id
+           AND vw.status = 1
+        WHERE vb.active = 1
+        GROUP BY vb.id, vb.name, vb.description, vb.sort_order
+        ORDER BY vb.sort_order ASC, vb.id ASC
+    </select>
+
+    <select id="selectById" resultMap="VocabularyBookMap">
+        SELECT
+            vb.id,
+            vb.name,
+            vb.description,
+            COUNT(vw.id) AS total_words
+        FROM vocabulary_book vb
+        LEFT JOIN vocabulary_word vw
+            ON vw.book_id = vb.id
+           AND vw.status = 1
+        WHERE vb.id = #{id}
+        GROUP BY vb.id, vb.name, vb.description
+    </select>
+</mapper>

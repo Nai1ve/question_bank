@@ -1,0 +1,64 @@
+.home-page {
+  padding-top: calc(env(safe-area-inset-top) + 96rpx);
+}
+
+.home-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 40rpx;
+}
+
+.home-user {
+  display: flex;
+  align-items: center;
+  gap: 22rpx;
+  flex: 1;
+  min-width: 0;
+}
+
+.home-name {
+  font-size: 38rpx;
+  font-weight: 600;
+  color: #1b1b1b;
+}
+
+.ghost-button {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.home-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 216rpx;
+  padding: 36rpx 34rpx;
+  margin-bottom: 30rpx;
+  box-sizing: border-box;
+}
+
+.card-active {
+  border: 4rpx solid #4d82ff;
+}
+
+.card-title {
+  font-size: 46rpx;
+  font-weight: 600;
+  color: #2a2a2a;
+}
+
+.card-subtitle {
+  margin-top: 12rpx;
+  font-size: 27rpx;
+  color: #9ba1aa;
+}
+
+.card-visual {
+  width: 188rpx;
+  height: 166rpx;
+  border-radius: 26rpx;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.44) 0%, rgba(255, 255, 255, 0) 52%),
+    linear-gradient(180deg, #e7f0fb 0%, #dce8f6 100%);
+}

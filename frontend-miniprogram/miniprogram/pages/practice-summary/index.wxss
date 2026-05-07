@@ -1,0 +1,130 @@
+.summary-page {
+  background: #f7f7f5;
+}
+
+.summary-hero {
+  padding: 36rpx 32rpx;
+  margin-bottom: 28rpx;
+}
+
+.summary-title {
+  font-size: 38rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.summary-subtitle {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  color: #7c8798;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+  margin-top: 30rpx;
+}
+
+.metric-card {
+  padding: 26rpx 24rpx;
+  border-radius: 24rpx;
+  background: #f8fafc;
+}
+
+.metric-value {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #111827;
+}
+
+.metric-label {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: #8994a4;
+}
+
+.result-card {
+  padding: 32rpx 30rpx;
+  margin-bottom: 24rpx;
+}
+
+.result-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18rpx;
+}
+
+.result-seq {
+  font-size: 26rpx;
+  color: #6b7280;
+}
+
+.result-badge {
+  padding: 10rpx 18rpx;
+  border-radius: 999rpx;
+  font-size: 23rpx;
+}
+
+.result-badge-correct {
+  background: #ecfdf3;
+  color: #15803d;
+}
+
+.result-badge-wrong {
+  background: #fef3f2;
+  color: #b42318;
+}
+
+.result-stem {
+  margin-top: 20rpx;
+  font-size: 31rpx;
+  color: #1f2937;
+}
+
+.result-answer {
+  margin-top: 16rpx;
+  font-size: 27rpx;
+  color: #556274;
+}
+
+.result-analysis {
+  margin-top: 18rpx;
+  font-size: 28rpx;
+  color: #334155;
+}
+
+.summary-action-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+  margin-top: 28rpx;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 12rpx);
+}
+
+.summary-primary-action,
+.summary-secondary-action {
+  height: 96rpx;
+  border-radius: 999rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.summary-primary-action {
+  border: none;
+  background: #111111;
+  color: #ffffff;
+  box-shadow: 0 18rpx 34rpx rgba(17, 24, 39, 0.14);
+}
+
+.summary-secondary-action {
+  border: 2rpx solid #d9e1eb;
+  background: #ffffff;
+  color: #334155;
+}
+
+.summary-primary-action::after,
+.summary-secondary-action::after {
+  border: none;
+}

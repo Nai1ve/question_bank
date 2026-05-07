@@ -1,0 +1,15 @@
+<view class="tabbar-shell">
+  <view class="tabbar-surface">
+    <view
+      wx:for="{{tabs}}"
+      wx:key="pagePath"
+      class="tabbar-item {{selected == index ? 'tabbar-item-active' : ''}}"
+      data-index="{{index}}"
+      data-path="{{item.pagePath}}"
+      bindtap="handleSwitch"
+    >
+      {{item.text}}
+    </view>
+    <view class="tabbar-divider"></view>
+  </view>
+</view>

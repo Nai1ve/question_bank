@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.practice.persistence.QuestionMapper">
+
+    <resultMap id="QuestionMap" type="com.onepass.practice.practice.persistence.QuestionDO">
+        <id property="id" column="id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="questionType" column="question_type"/>
+        <result property="stem" column="stem"/>
+        <result property="analysis" column="analysis"/>
+        <result property="sortOrder" column="sort_order"/>
+    </resultMap>
+
+    <select id="selectAllActive" resultMap="QuestionMap">
+        SELECT id, category_id, question_type, stem, analysis, sort_order
+        FROM question
+        WHERE status = 1
+        ORDER BY category_id ASC, sort_order ASC, id ASC
+    </select>
+</mapper>

@@ -1,0 +1,14 @@
+@import "styles/theme.wxss";
+
+page {
+  min-height: 100%;
+  background: #f7f7f5;
+  color: #1f2937;
+  font-family: "DengXian", "FangSong", "KaiTi", serif;
+}
+
+button,
+input,
+textarea {
+  font-family: "DengXian", "FangSong", "KaiTi", serif;
+}

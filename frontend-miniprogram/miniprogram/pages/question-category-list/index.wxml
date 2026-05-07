@@ -1,0 +1,45 @@
+<view class="page-shell list-page">
+  <view class="custom-nav">
+    <view class="back-button" bindtap="handleBack">‹</view>
+    <view class="nav-title">{{title}}</view>
+  </view>
+
+  <view wx:if="{{directLeaves.length}}" class="surface-card group-panel direct-panel">
+    <view
+      wx:for="{{directLeaves}}"
+      wx:key="id"
+      class="leaf-chip"
+      data-id="{{item.id}}"
+      data-name="{{item.name}}"
+      bindtap="handleStartPractice"
+    >
+      {{item.name}}
+    </view>
+  </view>
+
+  <view
+    wx:for="{{sections}}"
+    wx:key="id"
+    wx:for-item="section"
+    class="surface-card group-panel"
+  >
+    <view class="group-header">
+      <view class="group-title">{{section.name}}</view>
+      <view class="group-subtitle">{{section.subtitle}}</view>
+    </view>
+
+    <view class="leaf-grid">
+      <view
+        wx:for="{{section.leaves}}"
+        wx:key="id"
+        wx:for-item="leaf"
+        class="leaf-chip"
+        data-id="{{leaf.id}}"
+        data-name="{{leaf.name}}"
+        bindtap="handleStartPractice"
+      >
+        {{leaf.name}}
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.student.persistence.StudentDashboardTemplateMapper">
+
+    <resultMap id="StudentDashboardTemplateMap" type="com.onepass.practice.student.persistence.StudentDashboardTemplateDO">
+        <id property="id" column="id"/>
+        <result property="templateCode" column="template_code"/>
+        <result property="title" column="title"/>
+        <result property="templateName" column="template_name"/>
+        <result property="currentQuestionBank" column="current_question_bank"/>
+        <result property="currentRecitePlan" column="current_recite_plan"/>
+    </resultMap>
+
+    <select id="selectActiveTemplate" resultMap="StudentDashboardTemplateMap">
+        SELECT id, template_code, title, template_name, current_question_bank, current_recite_plan
+        FROM student_dashboard_template
+        WHERE active = 1
+        ORDER BY id ASC
+        LIMIT 1
+    </select>
+</mapper>

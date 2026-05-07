@@ -1,0 +1,33 @@
+<view class="page-shell page-shell-tabbed home-page">
+  <view class="home-header">
+    <view class="home-user">
+      <view class="avatar-circle">{{avatarText}}</view>
+      <view class="home-name font-title">{{user.displayName}}</view>
+    </view>
+    <button class="ghost-button" bindtap="handleOpenWrongBook">我的错题本</button>
+  </view>
+
+  <view class="surface-card home-card" bindtap="handleOpenQuestionBank">
+    <view>
+      <view class="card-title font-title">题库</view>
+      <view class="card-subtitle content-copy">强化阶段必刷题库</view>
+    </view>
+    <view class="card-visual"></view>
+  </view>
+
+  <view class="surface-card home-card card-active" bindtap="handleOpenVocabulary">
+    <view>
+      <view class="card-title font-title">词库</view>
+      <view class="card-subtitle content-copy">建立计划并按 Day 进行背诵</view>
+    </view>
+    <view class="card-visual"></view>
+  </view>
+
+  <view class="surface-card home-card" bindtap="handleOpenTopxx">
+    <view>
+      <view class="card-title font-title">Top 错题榜</view>
+      <view class="card-subtitle content-copy">按榜单范围和分类进行筛选</view>
+    </view>
+    <view class="card-visual"></view>
+  </view>
+</view>

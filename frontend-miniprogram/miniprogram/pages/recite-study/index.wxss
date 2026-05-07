@@ -1,0 +1,56 @@
+.recite-study-page {
+  background: linear-gradient(180deg, #f6f7f4 0%, #eef2f7 100%);
+}
+
+.study-summary,
+.study-card {
+  padding: 30rpx;
+}
+
+.study-summary {
+  margin-bottom: 24rpx;
+}
+
+.study-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 12rpx;
+}
+
+.study-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+
+.study-word {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #111111;
+}
+
+.study-meaning {
+  margin-top: 14rpx;
+  font-size: 30rpx;
+  color: #374151;
+}
+
+.study-pos {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #7b8797;
+  font-family: "DengXian", "FangSong", "KaiTi", serif;
+}
+
+.study-action-group {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+  margin-top: 28rpx;
+  padding-bottom: calc(env(safe-area-inset-bottom) + 24rpx);
+}
+
+.study-action {
+  width: 100%;
+}

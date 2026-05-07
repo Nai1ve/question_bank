@@ -1,0 +1,49 @@
+<view class="page-shell summary-page">
+  <view class="custom-nav">
+    <view class="back-button" bindtap="handleBack">‹</view>
+    <view class="nav-title">练习统计</view>
+  </view>
+
+  <view wx:if="{{summary}}" class="surface-card summary-hero">
+    <view class="summary-title font-title">{{summary.categoryName}}</view>
+    <view class="summary-subtitle content-copy">{{summary.subtitle}}</view>
+    <view class="metric-grid">
+      <view class="metric-card">
+        <view class="metric-value">{{summary.totalCount}}</view>
+        <view class="metric-label">总题数</view>
+      </view>
+      <view class="metric-card">
+        <view class="metric-value">{{summary.correctCount}}</view>
+        <view class="metric-label">正确数</view>
+      </view>
+      <view class="metric-card">
+        <view class="metric-value">{{summary.wrongCount}}</view>
+        <view class="metric-label">错误数</view>
+      </view>
+      <view class="metric-card">
+        <view class="metric-value">{{summary.accuracy}}</view>
+        <view class="metric-label">正确率</view>
+      </view>
+    </view>
+  </view>
+
+  <view
+    wx:for="{{questionResults}}"
+    wx:key="id"
+    class="surface-card result-card"
+  >
+    <view class="result-top">
+      <view class="result-seq">第 {{item.sequence}} 题</view>
+      <view class="{{item.badgeClassName}}">{{item.badgeLabel}}</view>
+    </view>
+    <view class="result-stem content-copy">{{item.stem}}</view>
+    <view class="result-answer content-copy">你的答案：{{item.userAnswerLabel}}</view>
+    <view class="result-answer content-copy">标准答案：{{item.standardAnswerLabel}}</view>
+    <view class="result-analysis content-copy">{{item.analysis}}</view>
+  </view>
+
+  <view wx:if="{{summary}}" class="summary-action-group">
+    <button class="summary-primary-action" bindtap="handleContinuePractice">继续练习</button>
+    <button class="summary-secondary-action" bindtap="handleGoHome">返回学习首页</button>
+  </view>
+</view>

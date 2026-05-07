@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.student.persistence.StudentDashboardBlockMapper">
+
+    <resultMap id="StudentDashboardBlockMap" type="com.onepass.practice.student.persistence.StudentDashboardBlockDO">
+        <id property="id" column="id"/>
+        <result property="templateId" column="template_id"/>
+        <result property="blockKey" column="block_key"/>
+        <result property="label" column="label"/>
+        <result property="content" column="content"/>
+        <result property="sortOrder" column="sort_order"/>
+    </resultMap>
+
+    <select id="selectByTemplateId" resultMap="StudentDashboardBlockMap">
+        SELECT id, template_id, block_key, label, content, sort_order
+        FROM student_dashboard_block
+        WHERE template_id = #{templateId}
+        ORDER BY sort_order ASC, id ASC
+    </select>
+</mapper>

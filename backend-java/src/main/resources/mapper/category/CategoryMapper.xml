@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.category.persistence.CategoryMapper">
+
+    <resultMap id="CategoryMap" type="com.onepass.practice.category.persistence.CategoryDO">
+        <id property="id" column="id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="name" column="name"/>
+        <result property="subtitle" column="subtitle"/>
+        <result property="leaf" column="is_leaf"/>
+        <result property="sortOrder" column="sort_order"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="CategoryMap">
+        SELECT id, parent_id, name, subtitle, is_leaf, sort_order
+        FROM category
+        ORDER BY COALESCE(parent_id, ''), sort_order ASC, id ASC
+    </select>
+</mapper>

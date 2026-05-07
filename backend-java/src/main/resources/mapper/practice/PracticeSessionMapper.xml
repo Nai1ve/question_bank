@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.practice.persistence.PracticeSessionMapper">
+
+    <resultMap id="PracticeSessionMap" type="com.onepass.practice.practice.persistence.PracticeSessionDO">
+        <id property="id" column="id"/>
+        <result property="sessionId" column="session_id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="entryType" column="entry_type"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="feedbackMode" column="feedback_mode"/>
+        <result property="status" column="status"/>
+        <result property="currentIndex" column="current_index"/>
+        <result property="totalCount" column="total_count"/>
+        <result property="startedAt" column="started_at"/>
+        <result property="lastActiveAt" column="last_active_at"/>
+        <result property="completedAt" column="completed_at"/>
+        <result property="expiredAt" column="expired_at"/>
+        <result property="abandonedAt" column="abandoned_at"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <sql id="PracticeSessionColumns">
+        id,
+        session_id,
+        student_id,
+        entry_type,
+        category_id,
+        category_name,
+        feedback_mode,
+        status,
+        current_index,
+        total_count,
+        started_at,
+        last_active_at,
+        completed_at,
+        expired_at,
+        abandoned_at,
+        created_at,
+        updated_at,
+        version
+    </sql>
+
+    <select id="selectBySessionId" resultMap="PracticeSessionMap">
+        SELECT <include refid="PracticeSessionColumns"/>
+        FROM practice_session
+        WHERE session_id = #{sessionId}
+    </select>
+
+    <select id="selectLatestActiveSession" resultMap="PracticeSessionMap">
+        SELECT <include refid="PracticeSessionColumns"/>
+        FROM practice_session
+        WHERE student_id = #{studentId}
+          AND entry_type = #{entryType}
+          AND category_id = #{categoryId}
+          AND status = 'ONGOING'
+        ORDER BY last_active_at DESC
+        LIMIT 1
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO practice_session (
+            session_id,
+            student_id,
+            entry_type,
+            category_id,
+            category_name,
+            feedback_mode,
+            status,
+            current_index,
+            total_count,
+            started_at,
+            last_active_at,
+            completed_at,
+            expired_at,
+            abandoned_at,
+            version
+        ) VALUES (
+            #{sessionId},
+            #{studentId},
+            #{entryType},
+            #{categoryId},
+            #{categoryName},
+            #{feedbackMode},
+            #{status},
+            #{currentIndex},
+            #{totalCount},
+            #{startedAt},
+            #{lastActiveAt},
+            #{completedAt},
+            #{expiredAt},
+            #{abandonedAt},
+            #{version}
+        )
+    </insert>
+
+    <update id="updateProgressAndActivity">
+        UPDATE practice_session
+        SET current_index = #{currentIndex},
+            last_active_at = #{lastActiveAt},
+            version = version + 1
+        WHERE session_id = #{sessionId}
+          AND version = #{version}
+    </update>
+
+    <update id="updateStatus">
+        UPDATE practice_session
+        SET status = #{status},
+            last_active_at = #{lastActiveAt},
+            completed_at = #{completedAt},
+            expired_at = #{expiredAt},
+            abandoned_at = #{abandonedAt},
+            version = version + 1
+        WHERE session_id = #{sessionId}
+          AND version = #{version}
+    </update>
+</mapper>

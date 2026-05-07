@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.practice.persistence.PracticeAnswerRecordMapper">
+
+    <select id="selectMaxSubmitSeq" resultType="int">
+        SELECT COALESCE(MAX(submit_seq), 0)
+        FROM practice_answer_record
+        WHERE session_id = #{sessionId}
+          AND question_id = #{questionId}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO practice_answer_record (
+            session_id,
+            question_id,
+            submit_seq,
+            selected_answer_json,
+            correct,
+            submitted_at
+        ) VALUES (
+            #{sessionId},
+            #{questionId},
+            #{submitSeq},
+            #{selectedAnswerJson},
+            #{correct},
+            #{submittedAt}
+        )
+    </insert>
+</mapper>

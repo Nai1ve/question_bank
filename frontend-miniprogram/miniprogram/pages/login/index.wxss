@@ -1,0 +1,146 @@
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  padding: calc(env(safe-area-inset-top) + 34rpx) 36rpx calc(env(safe-area-inset-bottom) + 84rpx);
+  box-sizing: border-box;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255, 255, 255, 0.9) 0, rgba(255, 255, 255, 0) 8rpx),
+    radial-gradient(circle at 78% 34%, rgba(255, 255, 255, 0.76) 0, rgba(255, 255, 255, 0) 7rpx),
+    radial-gradient(circle at 58% 62%, rgba(255, 255, 255, 0.82) 0, rgba(255, 255, 255, 0) 6rpx),
+    linear-gradient(180deg, #d7d9df 0%, #cfd2d8 42%, #d9d7d4 100%);
+}
+
+.login-noise,
+.login-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+.login-noise {
+  opacity: 0.08;
+  background-image:
+    linear-gradient(0deg, transparent 24%, rgba(255, 255, 255, 0.6) 25%, transparent 26%),
+    linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.4) 25%, transparent 26%);
+  background-size: 14rpx 14rpx;
+}
+
+.login-overlay {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%);
+}
+
+.login-body {
+  position: relative;
+  z-index: 1;
+  min-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 72rpx);
+  display: flex;
+  flex-direction: column;
+}
+
+.login-topline {
+  font-size: 32rpx;
+  color: #3f4751;
+  margin-bottom: 80rpx;
+}
+
+.hero-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.hero-title {
+  margin-top: 238rpx;
+  font-size: 64rpx;
+  font-weight: 700;
+  color: #111111;
+}
+
+.brand-text {
+  margin-top: 18rpx;
+  font-size: 54rpx;
+  font-weight: 700;
+  color: #1b1b1b;
+}
+
+.mascot-shell {
+  width: 220rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14rpx;
+  color: #535b66;
+}
+
+.mascot-head {
+  position: relative;
+  width: 134rpx;
+  height: 150rpx;
+  border: 4rpx solid rgba(62, 68, 76, 0.55);
+  border-radius: 8rpx;
+  background: rgba(255, 255, 255, 0.16);
+  transform: perspective(10rpx) rotateY(-4deg);
+}
+
+.eye {
+  position: absolute;
+  top: 58rpx;
+  width: 22rpx;
+  height: 28rpx;
+  border-radius: 50%;
+  background: rgba(62, 68, 76, 0.8);
+}
+
+.left-eye {
+  left: 34rpx;
+}
+
+.right-eye {
+  right: 34rpx;
+}
+
+.mascot-body {
+  width: 116rpx;
+  height: 116rpx;
+  border-radius: 28rpx;
+  border: 4rpx solid rgba(62, 68, 76, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.login-copy {
+  margin-top: 184rpx;
+  color: #49515b;
+  font-size: 27rpx;
+}
+
+.wechat-button {
+  margin-top: 40rpx;
+  height: 102rpx;
+  border-radius: 999rpx;
+  border: none;
+  background: rgba(255, 255, 255, 0.94);
+  color: #111111;
+  font-size: 34rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 18rpx 42rpx rgba(17, 24, 39, 0.12);
+}
+
+.wechat-button::after {
+  border: none;
+}
+
+.agreement-text {
+  position: relative;
+  z-index: 1;
+  margin-top: 36rpx;
+  text-align: center;
+  color: rgba(84, 90, 100, 0.72);
+  font-size: 23rpx;
+}
