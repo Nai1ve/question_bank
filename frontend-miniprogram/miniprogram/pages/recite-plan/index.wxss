@@ -1,53 +1,130 @@
 .recite-plan-page {
-  background: linear-gradient(180deg, #f6f7f4 0%, #eef2f7 100%);
+  background: #f4f7fb;
 }
 
 .current-plan-card,
 .book-card {
-  padding: 30rpx;
+  padding: 28rpx;
 }
 
 .current-plan-card {
   margin-bottom: 28rpx;
+  border: 1rpx solid rgba(65, 84, 112, 0.08);
 }
 
 .card-title {
-  font-size: 26rpx;
-  color: #7d8796;
+  font-size: 22rpx;
+  color: #7c8797;
   margin-bottom: 10rpx;
+}
+
+.current-plan-topline,
+.book-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18rpx;
 }
 
 .current-plan-name,
 .book-name {
-  font-size: 34rpx;
+  font-size: 32rpx;
   font-weight: 700;
-  color: #111111;
+  color: #162033;
+  line-height: 1.35;
+}
+
+.plan-percent {
+  min-width: 96rpx;
+  text-align: right;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #245a9c;
+}
+
+.plan-progress-track {
+  height: 12rpx;
+  border-radius: 999rpx;
+  background: #e4ebf3;
+  overflow: hidden;
+  margin: 26rpx 0 24rpx;
+}
+
+.plan-progress-fill {
+  height: 100%;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #3f7fc4 0%, #29a37a 100%);
+}
+
+.current-plan-meta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14rpx;
+}
+
+.plan-meta-item {
+  min-height: 96rpx;
+  padding: 16rpx;
+  border-radius: 18rpx;
+  background: #f6f8fb;
+  box-sizing: border-box;
+}
+
+.plan-meta-value {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #162033;
+  line-height: 1.25;
+}
+
+.plan-meta-label {
+  margin-top: 8rpx;
+  font-size: 20rpx;
+  color: #8a94a3;
 }
 
 .card-button {
-  margin-top: 22rpx;
+  margin-top: 24rpx;
+  width: 100%;
 }
 
 .book-grid {
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
+  gap: 16rpx;
   margin-top: 24rpx;
 }
 
 .book-card {
-  border: 2rpx solid transparent;
+  border: 2rpx solid rgba(65, 84, 112, 0.07);
+  box-shadow: 0 12rpx 30rpx rgba(17, 24, 39, 0.05);
 }
 
 .book-card-active {
-  border-color: #263445;
-  box-shadow: 0 18rpx 44rpx rgba(17, 24, 39, 0.1);
+  border-color: #2f77bf;
+  box-shadow: 0 18rpx 44rpx rgba(47, 119, 191, 0.14);
+}
+
+.book-count {
+  min-width: 72rpx;
+  height: 44rpx;
+  border-radius: 999rpx;
+  background: #edf5ff;
+  color: #245a9c;
+  font-size: 22rpx;
+  line-height: 44rpx;
+  text-align: center;
 }
 
 .book-description {
   margin: 12rpx 0 14rpx;
-  font-size: 26rpx;
-  color: #576170;
+  font-size: 25rpx;
+  color: #5c6878;
+}
+
+.book-meta {
+  font-size: 22rpx;
+  color: #8b95a3;
 }
 
 .plan-heading {
@@ -62,18 +139,20 @@
 }
 
 .filter-chip {
-  min-width: 160rpx;
-  padding: 20rpx 24rpx;
-  border-radius: 999rpx;
+  min-width: 154rpx;
+  padding: 18rpx 24rpx;
+  border-radius: 16rpx;
   background: #ffffff;
-  color: #566273;
+  color: #526071;
   font-size: 26rpx;
   text-align: center;
-  box-shadow: 0 12rpx 28rpx rgba(17, 24, 39, 0.05);
+  border: 2rpx solid rgba(65, 84, 112, 0.08);
+  box-shadow: 0 10rpx 24rpx rgba(17, 24, 39, 0.04);
 }
 
 .filter-chip-active {
-  background: #1f2d3d;
+  background: #213247;
+  border-color: #213247;
   color: #ffffff;
 }
 

@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface QuestionMapper {
 
     List<QuestionDO> selectAllActive();
+
+    int insert(QuestionDO item);
 }

@@ -29,7 +29,12 @@
       </view>
     </view>
 
-    <view class="question-stem content-copy">{{currentQuestion.stem}}</view>
+    <view class="question-stem content-copy content-node-list">
+      <block wx:for="{{currentQuestion.stemNodes}}" wx:key="id">
+        <text wx:if="{{item.type === 'text'}}">{{item.text}}</text>
+        <image wx:elif="{{item.type === 'image'}}" class="content-image" mode="widthFix" src="{{item.src}}"></image>
+      </block>
+    </view>
 
     <view class="option-list">
       <view
@@ -40,7 +45,12 @@
         bindtap="handleTapOption"
       >
         <view class="{{item.keyClassName}}">{{item.key}}</view>
-        <view class="option-content content-copy">{{item.content}}</view>
+        <view class="option-content content-copy content-node-list">
+          <block wx:for="{{item.contentNodes}}" wx:key="id">
+            <text wx:if="{{item.type === 'text'}}">{{item.text}}</text>
+            <image wx:elif="{{item.type === 'image'}}" class="content-image" mode="widthFix" src="{{item.src}}"></image>
+          </block>
+        </view>
       </view>
     </view>
   </view>
@@ -49,7 +59,12 @@
     <view class="{{feedbackResult.titleClassName}}">{{feedbackResult.title}}</view>
     <view class="feedback-line content-copy">你的答案：{{feedbackResult.userAnswer}}</view>
     <view class="feedback-line content-copy">标准答案：{{feedbackResult.standardAnswer}}</view>
-    <view class="feedback-analysis content-copy">{{feedbackResult.analysis}}</view>
+    <view class="feedback-analysis content-copy content-node-list">
+      <block wx:for="{{feedbackResult.analysisNodes}}" wx:key="id">
+        <text wx:if="{{item.type === 'text'}}">{{item.text}}</text>
+        <image wx:elif="{{item.type === 'image'}}" class="content-image" mode="widthFix" src="{{item.src}}"></image>
+      </block>
+    </view>
   </view>
 
   <button class="primary-button primary-action" bindtap="handlePrimaryAction">{{primaryButtonText}}</button>

@@ -4,6 +4,7 @@ const {
   moveToNextPracticeQuestion,
   finalizePracticeSession
 } = require('../../services/practice');
+const { buildContentNodes } = require('../../utils/content');
 
 function getEntryTypeLabel(entryType) {
   return entryType === 'topxx' ? 'TopXX' : '普通刷题';
@@ -14,22 +15,36 @@ function getFeedbackModeLabel(feedbackMode) {
 }
 
 function getQuestionTypeLabel(questionType) {
-  return questionType === 'single' ? '单选题' : '多选题';
+  const labelMap = {
+    single: '单选题',
+    multiple: '多选题',
+    indefinite: '不定项选择',
+    judge: '判断题'
+  };
+  return labelMap[questionType] || '选择题';
 }
 
 function getQuestionHint(questionType) {
-  return questionType === 'single' ? '请选择 1 个答案' : '请选择全部正确答案';
+  if (questionType === 'single' || questionType === 'judge') {
+    return '请选择 1 个答案';
+  }
+  return questionType === 'indefinite' ? '请选择全部正确答案，可多选' : '请选择全部正确答案';
+}
+
+function isSingleSelectQuestion(questionType) {
+  return questionType === 'single' || questionType === 'judge';
 }
 
 function buildOptionItems(question, selectedOptions) {
   return (question.options || []).map((option) => {
     const selected = selectedOptions.indexOf(option.key) >= 0;
     return {
-      ...option,
-      selected,
-      itemClassName: selected ? 'option-item option-item-selected' : 'option-item',
-      keyClassName: selected ? 'option-key option-key-selected' : 'option-key'
-    };
+    ...option,
+    selected,
+    contentNodes: buildContentNodes(option.content),
+    itemClassName: selected ? 'option-item option-item-selected' : 'option-item',
+    keyClassName: selected ? 'option-key option-key-selected' : 'option-key'
+  };
   });
 }
 
@@ -42,6 +57,7 @@ function buildQuestionCard(question, selectedOptions) {
     ...question,
     typeLabel: getQuestionTypeLabel(question.type),
     questionHint: getQuestionHint(question.type),
+    stemNodes: buildContentNodes(question.stem),
     optionItems: buildOptionItems(question, selectedOptions)
   };
 }
@@ -54,6 +70,7 @@ function buildFeedbackCard(result) {
   return {
     ...result,
     title: result.correct ? '回答正确' : '回答错误',
+    analysisNodes: buildContentNodes(result.analysis),
     titleClassName: result.correct ? 'feedback-title feedback-title-correct' : 'feedback-title feedback-title-wrong'
   };
 }
@@ -179,7 +196,7 @@ Page({
     const optionKey = event.currentTarget.dataset.key;
     const nextSelected = this.data.selectedOptions.slice();
 
-    if (this.data.currentQuestion.type === 'single') {
+    if (isSingleSelectQuestion(this.data.currentQuestion.type)) {
       const selectedOptions = [optionKey];
       this.setData({
         selectedOptions,
@@ -210,7 +227,7 @@ Page({
 
       if (!selectedOptions.length) {
         wx.showToast({
-          title: currentQuestion.type === 'single' ? '请选择一个答案' : '请至少选择一个答案',
+          title: isSingleSelectQuestion(currentQuestion.type) ? '请选择一个答案' : '请至少选择一个答案',
           icon: 'none'
         });
         return;

@@ -6,13 +6,50 @@
 
     <resultMap id="StudentProfileMap" type="com.onepass.practice.student.persistence.StudentProfileDO">
         <id property="id" column="id"/>
+        <result property="wechatOpenid" column="wechat_openid"/>
+        <result property="wechatUnionid" column="wechat_unionid"/>
         <result property="displayName" column="display_name"/>
         <result property="avatarUrl" column="avatar_url"/>
     </resultMap>
 
+    <sql id="StudentProfileColumns">
+        id, wechat_openid, wechat_unionid, display_name, avatar_url
+    </sql>
+
     <select id="selectById" resultMap="StudentProfileMap">
-        SELECT id, display_name, avatar_url
+        SELECT
+        <include refid="StudentProfileColumns"/>
         FROM student
         WHERE id = #{id}
     </select>
+
+    <select id="selectByWechatOpenid" resultMap="StudentProfileMap">
+        SELECT
+        <include refid="StudentProfileColumns"/>
+        FROM student
+        WHERE wechat_openid = #{wechatOpenid}
+    </select>
+
+    <insert id="insert" parameterType="com.onepass.practice.student.persistence.StudentProfileDO"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO student (
+            wechat_openid,
+            wechat_unionid,
+            display_name,
+            avatar_url
+        )
+        VALUES (
+            #{wechatOpenid},
+            #{wechatUnionid},
+            #{displayName},
+            #{avatarUrl}
+        )
+    </insert>
+
+    <update id="updateWechatUnionid">
+        UPDATE student
+        SET wechat_unionid = #{wechatUnionid}
+        WHERE id = #{id}
+          AND (wechat_unionid IS NULL OR wechat_unionid = '')
+    </update>
 </mapper>

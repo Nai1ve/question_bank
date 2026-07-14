@@ -17,4 +17,10 @@ public interface ReciteDayRecordMapper {
             @Param("planDayId") Long planDayId,
             @Param("studentId") Long studentId
     );
+
+    ReciteDayRecordDO selectLatestByPlanDayIdStudentIdAndMode(
+            @Param("planDayId") Long planDayId,
+            @Param("studentId") Long studentId,
+            @Param("mode") String mode
+    );
 }

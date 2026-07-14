@@ -83,6 +83,18 @@
   color: #1f2937;
 }
 
+.content-node-list {
+  white-space: pre-wrap;
+}
+
+.content-image {
+  display: block;
+  width: 100%;
+  margin: 18rpx 0;
+  border-radius: 20rpx;
+  background: #f1f5f9;
+}
+
 .result-answer {
   margin-top: 16rpx;
   font-size: 27rpx;

@@ -16,6 +16,20 @@ function buildBookOptions(books, activeBookId) {
   }));
 }
 
+function buildActivePlanView(plan) {
+  if (!plan) {
+    return null;
+  }
+  const completedDays = Number(plan.completedDays || 0);
+  const totalDays = Number(plan.totalDays || 0);
+  const progressPercent = totalDays > 0 ? Math.round((completedDays * 100) / totalDays) : 0;
+  return {
+    ...plan,
+    progressPercent,
+    progressStyle: `width: ${progressPercent}%;`
+  };
+}
+
 Page({
   data: {
     books: [],
@@ -36,14 +50,15 @@ Page({
         getActiveRecitePlan()
       ]);
 
-      const selectedBookId = activePlan && activePlan.bookId
-        ? activePlan.bookId
+      const activePlanView = buildActivePlanView(activePlan);
+      const selectedBookId = activePlanView && activePlanView.bookId
+        ? activePlanView.bookId
         : (books[0] ? books[0].id : '');
-      const dailyCount = activePlan && activePlan.dailyCount ? activePlan.dailyCount : 5;
+      const dailyCount = activePlanView && activePlanView.dailyCount ? activePlanView.dailyCount : 5;
 
       this.setData({
         books: buildBookOptions(books, selectedBookId),
-        activePlan,
+        activePlan: activePlanView,
         selectedBookId,
         dailyCount,
         countOptions: buildCountOptions(dailyCount)

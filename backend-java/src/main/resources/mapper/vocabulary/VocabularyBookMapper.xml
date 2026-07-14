@@ -39,4 +39,19 @@
         WHERE vb.id = #{id}
         GROUP BY vb.id, vb.name, vb.description
     </select>
+
+    <select id="selectMaxSortOrder" resultType="java.lang.Integer">
+        SELECT COALESCE(MAX(sort_order), 0)
+        FROM vocabulary_book
+    </select>
+
+    <insert id="upsertImportBook">
+        INSERT INTO vocabulary_book (id, name, description, active, sort_order)
+        VALUES (#{id}, #{name}, #{description}, 1, #{sortOrder})
+        ON DUPLICATE KEY UPDATE
+            name = VALUES(name),
+            description = VALUES(description),
+            active = VALUES(active),
+            sort_order = sort_order
+    </insert>
 </mapper>

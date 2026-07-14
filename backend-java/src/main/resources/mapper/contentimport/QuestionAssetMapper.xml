@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.contentimport.persistence.QuestionAssetMapper">
+
+    <resultMap id="QuestionAssetMap" type="com.onepass.practice.contentimport.persistence.QuestionAssetDO">
+        <id property="id" column="id"/>
+        <result property="batchId" column="batch_id"/>
+        <result property="importItemId" column="import_item_id"/>
+        <result property="questionId" column="question_id"/>
+        <result property="assetType" column="asset_type"/>
+        <result property="originalName" column="original_name"/>
+        <result property="relativePath" column="relative_path"/>
+        <result property="contentType" column="content_type"/>
+        <result property="fileSize" column="file_size"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO question_asset (
+            batch_id,
+            import_item_id,
+            question_id,
+            asset_type,
+            original_name,
+            relative_path,
+            content_type,
+            file_size
+        ) VALUES (
+            #{batchId},
+            #{importItemId},
+            #{questionId},
+            #{assetType},
+            #{originalName},
+            #{relativePath},
+            #{contentType},
+            #{fileSize}
+        )
+    </insert>
+
+    <update id="updateQuestionIdByBatchAndRelativePath">
+        UPDATE question_asset
+        SET question_id = #{questionId}
+        WHERE batch_id = #{batchId}
+          AND relative_path = #{relativePath}
+    </update>
+
+    <select id="selectByQuestionIdAndRelativePath" resultMap="QuestionAssetMap">
+        SELECT
+            id,
+            batch_id,
+            import_item_id,
+            question_id,
+            asset_type,
+            original_name,
+            relative_path,
+            content_type,
+            file_size
+        FROM question_asset
+        WHERE question_id = #{questionId}
+          AND relative_path = #{relativePath}
+        LIMIT 1
+    </select>
+</mapper>

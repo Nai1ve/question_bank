@@ -10,6 +10,10 @@ DELETE FROM practice_session_question;
 DELETE FROM practice_session;
 DELETE FROM question_wrong_stat;
 
+DELETE FROM question_asset;
+DELETE FROM question_import_item;
+DELETE FROM question_import_batch;
+
 DELETE FROM recite_day_record;
 DELETE FROM recite_plan_day;
 DELETE FROM recite_plan;

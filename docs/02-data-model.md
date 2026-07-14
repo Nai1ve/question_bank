@@ -91,6 +91,17 @@
 - `recite_day_record`
   - 保存每次 Day 测试记录
   - 已完成 Day 的“查看最近一次结果”按 `plan_day_id + student_id + created_at DESC` 获取最新记录
+- `question_import_batch`
+  - 保存一次 docx 上传导入批次
+  - 记录原文件名、批次状态、统计信息、错误报告、生成 Markdown 路径和导入时间
+  - 确认导入前只写 import 表，不污染正式题库
+- `question_import_item`
+  - 保存每个题块的解析结果、标准化题型、分类、状态、错误/警告、原始 Markdown 块和目标 question_id
+  - 状态包含 `READY / WARNING / ERROR / UNSUPPORTED / IMPORTED`
+- `question_asset`
+  - 保存图片、图表等资源的相对路径、类型、大小和目标题目关系
+  - 第一版资产存本地文件系统，后续可切对象存储
+  - 确认导入后，正式题干中的图片链接通过 `question_id + relative_path` 反查本地文件
 
 ## Current Cutover Boundary
 

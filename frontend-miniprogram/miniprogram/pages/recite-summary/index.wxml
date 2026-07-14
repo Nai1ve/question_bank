@@ -5,8 +5,13 @@
   </view>
 
   <view wx:if="{{summary}}" class="surface-card summary-card">
-    <view class="summary-title font-title">{{summary.bookName}} · {{summary.dayLabel}}</view>
-    <view class="summary-mode content-copy">{{summary.mode === 'cn_to_en' ? '中译英' : '英译中'}}</view>
+    <view class="summary-topline">
+      <view>
+        <view class="summary-title font-title">{{summary.bookName}}</view>
+        <view class="summary-mode content-copy">{{summary.dayLabel}} · {{summary.mode === 'cn_to_en' ? '中译英' : '英译中'}}</view>
+      </view>
+      <view class="summary-score font-title">{{summary.accuracy}}</view>
+    </view>
     <view class="summary-metrics">
       <view class="metric-item">
         <view class="metric-value">{{summary.totalCount}}</view>
@@ -30,11 +35,19 @@
   <view class="result-list">
     <view wx:for="{{items}}" wx:key="wordId" class="surface-card result-card">
       <view class="result-header">
+        <view class="result-index">{{index + 1}}</view>
         <view class="result-prompt content-copy">{{item.prompt}}</view>
         <view class="result-badge {{item.correct ? 'result-badge-correct' : 'result-badge-wrong'}}">{{item.correct ? '对' : '错'}}</view>
       </view>
-      <view class="result-meta content-copy">{{item.partOfSpeech}} · 标准：{{item.standardAnswer}}</view>
-      <view class="result-user content-copy">你的答案：{{item.userAnswer || '未填写'}}</view>
+      <view class="answer-row">
+        <view class="answer-label content-copy">标准</view>
+        <view class="answer-value content-copy">{{item.standardAnswer}}</view>
+      </view>
+      <view class="answer-row">
+        <view class="answer-label content-copy">作答</view>
+        <view class="answer-value content-copy">{{item.userAnswer || '未填写'}}</view>
+      </view>
+      <view wx:if="{{item.partOfSpeech}}" class="result-meta content-copy">{{item.partOfSpeech}}</view>
     </view>
   </view>
 

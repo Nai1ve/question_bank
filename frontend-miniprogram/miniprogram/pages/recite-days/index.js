@@ -1,32 +1,105 @@
 const { getActiveRecitePlan, listRecitePlanDays } = require('../../services/recite');
 
+const MODE_CONFIGS = [
+  {
+    mode: 'cn_to_en',
+    label: '中译英',
+    completedKey: 'cnToEnCompleted',
+    recordIdKey: 'cnToEnRecordId',
+    accuracyKey: 'cnToEnAccuracy'
+  },
+  {
+    mode: 'en_to_cn',
+    label: '英译中',
+    completedKey: 'enToCnCompleted',
+    recordIdKey: 'enToCnRecordId',
+    accuracyKey: 'enToCnAccuracy'
+  }
+];
+
 function buildDayCards(days) {
-  return days.map((item) => ({
-    ...item,
-    className: item.status === 'COMPLETED' ? 'surface-card day-card day-card-completed' : 'surface-card day-card',
-    statusText: resolveStatusText(item.status),
-    actionText: resolveActionText(item.status)
-  }));
+  return days.map((item) => {
+    const modeItems = buildModeItems(item);
+    const completedModeCount = modeItems.filter((modeItem) => modeItem.completed).length;
+    const modeProgressPercent = completedModeCount * 50;
+    return {
+      ...item,
+      modeItems,
+      completedModeCount,
+      modeProgressStyle: `width: ${modeProgressPercent}%;`,
+      className: item.status === 'COMPLETED' ? 'surface-card day-card day-card-completed' : 'surface-card day-card',
+      statusText: resolveStatusText(item, completedModeCount),
+      actionText: resolveActionText(item, completedModeCount),
+      actionClass: item.status === 'PENDING_STUDY' ? 'day-action day-action-muted' : 'day-action'
+    };
+  });
 }
 
-function resolveStatusText(status) {
-  if (status === 'COMPLETED') {
+function buildModeItems(day) {
+  return MODE_CONFIGS.map((config) => {
+    const completed = Boolean(day[config.completedKey]);
+    const accuracy = day[config.accuracyKey] || '';
+    return {
+      mode: config.mode,
+      label: config.label,
+      completed,
+      recordId: day[config.recordIdKey] || '',
+      accuracy,
+      statusText: completed ? (accuracy || '已完成') : (day.status === 'PENDING_STUDY' ? '待学习' : '待完成'),
+      className: completed ? 'mode-chip mode-chip-completed' : 'mode-chip'
+    };
+  });
+}
+
+function resolveStatusText(day, completedModeCount) {
+  if (day.status === 'COMPLETED') {
     return '已完成';
   }
-  if (status === 'PENDING_TEST') {
+  if (day.status === 'PENDING_TEST') {
+    if (completedModeCount > 0) {
+      return `已完成 ${completedModeCount}/2`;
+    }
     return '待测试';
   }
   return '待学习';
 }
 
-function resolveActionText(status) {
-  if (status === 'COMPLETED') {
+function resolveActionText(day, completedModeCount) {
+  if (day.status === 'COMPLETED') {
     return '查看结果或重学';
   }
-  if (status === 'PENDING_TEST') {
-    return '继续测试';
+  if (day.status === 'PENDING_TEST') {
+    return completedModeCount > 0 ? '继续未完成测试' : '开始测试';
   }
   return '先学习';
+}
+
+function buildModeActions(day) {
+  const startActions = [];
+  const summaryActions = [];
+  MODE_CONFIGS.forEach((config) => {
+    const completed = Boolean(day[config.completedKey]);
+    const recordId = day[config.recordIdKey];
+    if (!completed) {
+      startActions.push({
+        type: 'start',
+        label: `开始${config.label}`,
+        mode: config.mode
+      });
+      return;
+    }
+    if (recordId) {
+      summaryActions.push({
+        type: 'summary',
+        label: `查看${config.label}结果`,
+        recordId
+      });
+    }
+  });
+  return startActions.concat(summaryActions, {
+    type: 'study',
+    label: '重新学习并测试'
+  });
 }
 
 Page({
@@ -98,7 +171,7 @@ Page({
     }
 
     if (currentDay.status === 'PENDING_TEST') {
-      this.handleOpenModePicker(dayNumber);
+      this.handleOpenModePicker(currentDay);
       return;
     }
 
@@ -106,37 +179,42 @@ Page({
   },
 
   handleOpenCompletedDay(day) {
+    const actions = buildModeActions(day);
     wx.showActionSheet({
-      itemList: ['查看最近一次结果', '重新学习并测试'],
+      itemList: actions.map((item) => item.label),
       success: ({ tapIndex }) => {
-        if (tapIndex === 0) {
-          if (!day.latestRecordId) {
-            wx.showToast({
-              title: '当前暂无可查看结果',
-              icon: 'none'
-            });
-            return;
-          }
-          wx.navigateTo({
-            url: `/pages/recite-summary/index?recordId=${day.latestRecordId}&planId=${this.data.planId}`
-          });
-          return;
-        }
-        this.openStudyPage(day.dayNumber);
+        this.handleDayAction(day, actions[tapIndex]);
       }
     });
   },
 
-  handleOpenModePicker(dayNumber) {
+  handleOpenModePicker(day) {
+    const actions = buildModeActions(day);
     wx.showActionSheet({
-      itemList: ['开始中译英', '开始英译中'],
+      itemList: actions.map((item) => item.label),
       success: ({ tapIndex }) => {
-        const mode = tapIndex === 0 ? 'cn_to_en' : 'en_to_cn';
-        wx.navigateTo({
-          url: `/pages/recite-session/index?planId=${this.data.planId}&dayNumber=${dayNumber}&mode=${mode}`
-        });
+        this.handleDayAction(day, actions[tapIndex]);
       }
     });
+  },
+
+  handleDayAction(day, action) {
+    if (!action) {
+      return;
+    }
+    if (action.type === 'summary') {
+      wx.navigateTo({
+        url: `/pages/recite-summary/index?recordId=${action.recordId}&planId=${this.data.planId}`
+      });
+      return;
+    }
+    if (action.type === 'start') {
+      wx.navigateTo({
+        url: `/pages/recite-session/index?planId=${this.data.planId}&dayNumber=${day.dayNumber}&mode=${action.mode}`
+      });
+      return;
+    }
+    this.openStudyPage(day.dayNumber);
   },
 
   openStudyPage(dayNumber) {

@@ -5,15 +5,25 @@
   </view>
 
   <view wx:if="{{study}}" class="surface-card study-summary">
-    <view class="study-title font-title">{{study.bookName}} · {{study.dayLabel}}</view>
-    <view class="muted-text content-copy">共 {{study.totalCount}} 个单词，先完整浏览，再进入默写测试。</view>
+    <view class="study-summary-top">
+      <view>
+        <view class="study-title font-title">{{study.bookName}}</view>
+        <view class="muted-text content-copy">{{study.dayLabel}} · 共 {{study.totalCount}} 个单词</view>
+      </view>
+      <view class="study-count font-title">{{study.totalCount}}</view>
+    </view>
   </view>
 
   <view class="study-list">
     <view wx:for="{{study.items}}" wx:key="wordId" class="surface-card study-card">
-      <view class="study-word font-title">{{item.english}}</view>
+      <view class="study-card-head">
+        <view class="study-index">{{index + 1}}</view>
+        <view class="study-word-block">
+          <view class="study-word font-title">{{item.english}}</view>
+          <view wx:if="{{item.partOfSpeech}}" class="study-pos">{{item.partOfSpeech}}</view>
+        </view>
+      </view>
       <view class="study-meaning content-copy">{{item.chinese}}</view>
-      <view wx:if="{{item.partOfSpeech}}" class="study-pos">{{item.partOfSpeech}}</view>
     </view>
   </view>
 

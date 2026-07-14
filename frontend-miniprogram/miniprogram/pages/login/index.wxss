@@ -40,85 +40,47 @@
 .login-topline {
   font-size: 32rpx;
   color: #3f4751;
-  margin-bottom: 80rpx;
+  margin-bottom: 52rpx;
 }
 
-.hero-row {
+.buff-stage {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+  justify-content: flex-end;
+  padding-right: 38rpx;
+  margin-top: 24rpx;
+  margin-bottom: 30rpx;
+}
+
+.buff-image {
+  width: 226rpx;
+  height: 288rpx;
+  opacity: 0.72;
+}
+
+.hero-copy {
+  margin-top: 18rpx;
+  padding-left: 34rpx;
 }
 
 .hero-title {
-  margin-top: 238rpx;
   font-size: 64rpx;
   font-weight: 700;
   color: #111111;
+  line-height: 1.12;
 }
 
 .brand-text {
-  margin-top: 18rpx;
+  margin-top: 28rpx;
   font-size: 54rpx;
-  font-weight: 700;
-  color: #1b1b1b;
-}
-
-.mascot-shell {
-  width: 220rpx;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14rpx;
-  color: #535b66;
-}
-
-.mascot-head {
-  position: relative;
-  width: 134rpx;
-  height: 150rpx;
-  border: 4rpx solid rgba(62, 68, 76, 0.55);
-  border-radius: 8rpx;
-  background: rgba(255, 255, 255, 0.16);
-  transform: perspective(10rpx) rotateY(-4deg);
-}
-
-.eye {
-  position: absolute;
-  top: 58rpx;
-  width: 22rpx;
-  height: 28rpx;
-  border-radius: 50%;
-  background: rgba(62, 68, 76, 0.8);
-}
-
-.left-eye {
-  left: 34rpx;
-}
-
-.right-eye {
-  right: 34rpx;
-}
-
-.mascot-body {
-  width: 116rpx;
-  height: 116rpx;
-  border-radius: 28rpx;
-  border: 4rpx solid rgba(62, 68, 76, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28rpx;
   font-weight: 600;
-}
-
-.login-copy {
-  margin-top: 184rpx;
-  color: #49515b;
-  font-size: 27rpx;
+  color: #1b1b1b;
+  line-height: 1.12;
+  text-align: right;
+  padding-right: 54rpx;
 }
 
 .wechat-button {
-  margin-top: 40rpx;
+  margin-top: 106rpx;
   height: 102rpx;
   border-radius: 999rpx;
   border: none;

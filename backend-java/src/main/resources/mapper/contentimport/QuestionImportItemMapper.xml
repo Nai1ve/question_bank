@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.onepass.practice.contentimport.persistence.QuestionImportItemMapper">
+
+    <resultMap id="QuestionImportItemMap" type="com.onepass.practice.contentimport.persistence.QuestionImportItemDO">
+        <id property="id" column="id"/>
+        <result property="batchId" column="batch_id"/>
+        <result property="itemOrder" column="item_order"/>
+        <result property="sourceQuestionNo" column="source_question_no"/>
+        <result property="questionType" column="question_type"/>
+        <result property="normalizedQuestionType" column="normalized_question_type"/>
+        <result property="categoryPath" column="category_path"/>
+        <result property="status" column="status"/>
+        <result property="errorsJson" column="errors_json"/>
+        <result property="warningsJson" column="warnings_json"/>
+        <result property="parsedJson" column="parsed_json"/>
+        <result property="markdownBlock" column="markdown_block"/>
+        <result property="targetQuestionId" column="target_question_id"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO question_import_item (
+            batch_id,
+            item_order,
+            source_question_no,
+            question_type,
+            normalized_question_type,
+            category_path,
+            status,
+            errors_json,
+            warnings_json,
+            parsed_json,
+            markdown_block,
+            target_question_id
+        ) VALUES (
+            #{batchId},
+            #{itemOrder},
+            #{sourceQuestionNo},
+            #{questionType},
+            #{normalizedQuestionType},
+            #{categoryPath},
+            #{status},
+            #{errorsJson},
+            #{warningsJson},
+            #{parsedJson},
+            #{markdownBlock},
+            #{targetQuestionId}
+        )
+    </insert>
+
+    <select id="selectByBatchId" resultMap="QuestionImportItemMap">
+        SELECT
+            id,
+            batch_id,
+            item_order,
+            source_question_no,
+            question_type,
+            normalized_question_type,
+            category_path,
+            status,
+            errors_json,
+            warnings_json,
+            parsed_json,
+            markdown_block,
+            target_question_id
+        FROM question_import_item
+        WHERE batch_id = #{batchId}
+        ORDER BY item_order ASC
+    </select>
+
+    <select id="selectImportableByBatchId" resultMap="QuestionImportItemMap">
+        SELECT
+            id,
+            batch_id,
+            item_order,
+            source_question_no,
+            question_type,
+            normalized_question_type,
+            category_path,
+            status,
+            errors_json,
+            warnings_json,
+            parsed_json,
+            markdown_block,
+            target_question_id
+        FROM question_import_item
+        WHERE batch_id = #{batchId}
+          AND status IN ('READY', 'WARNING')
+        ORDER BY item_order ASC
+    </select>
+
+    <update id="updateImported">
+        UPDATE question_import_item
+        SET status = #{status},
+            target_question_id = #{targetQuestionId}
+        WHERE id = #{id}
+    </update>
+</mapper>

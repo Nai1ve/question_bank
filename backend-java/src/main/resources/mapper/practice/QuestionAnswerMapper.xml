@@ -16,4 +16,16 @@
         FROM question_answer
         ORDER BY question_id ASC, sort_order ASC, id ASC
     </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO question_answer (
+            question_id,
+            answer_key,
+            sort_order
+        ) VALUES (
+            #{questionId},
+            #{answerKey},
+            #{sortOrder}
+        )
+    </insert>
 </mapper>

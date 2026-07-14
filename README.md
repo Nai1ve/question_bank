@@ -10,8 +10,7 @@
 
 目录说明：
 
-- `docs/`：项目文档与原型图引用路径
+- `docs/`：项目文档、原型图、迭代管理
 - `backend-java/`：Java Spring Boot 单体服务
 - `frontend-miniprogram/`：微信小程序学生端
-- `doc/`：原始原型图目录，保留不动
 

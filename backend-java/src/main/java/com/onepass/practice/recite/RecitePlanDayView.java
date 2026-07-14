@@ -10,6 +10,12 @@ public record RecitePlanDayView(
         String latestMode,
         String lastAccuracy,
         Integer lastCorrectCount,
-        Integer lastWrongCount
+        Integer lastWrongCount,
+        boolean cnToEnCompleted,
+        Long cnToEnRecordId,
+        String cnToEnAccuracy,
+        boolean enToCnCompleted,
+        Long enToCnRecordId,
+        String enToCnAccuracy
 ) {
 }

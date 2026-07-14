@@ -18,4 +18,58 @@
         FROM category
         ORDER BY COALESCE(parent_id, ''), sort_order ASC, id ASC
     </select>
+
+    <select id="selectById" resultMap="CategoryMap">
+        SELECT id, parent_id, name, subtitle, is_leaf, sort_order
+        FROM category
+        WHERE id = #{id}
+        LIMIT 1
+    </select>
+
+    <select id="selectMaxSortOrderByParentId" resultType="java.lang.Integer">
+        SELECT COALESCE(MAX(sort_order), 0)
+        FROM category
+        WHERE (parent_id = #{parentId} OR (parent_id IS NULL AND #{parentId} IS NULL))
+    </select>
+
+    <select id="countChildren" resultType="int">
+        SELECT COUNT(*)
+        FROM category
+        WHERE parent_id = #{parentId}
+    </select>
+
+    <select id="countQuestions" resultType="int">
+        SELECT COUNT(*)
+        FROM question
+        WHERE category_id = #{categoryId}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO category (
+            id,
+            parent_id,
+            name,
+            subtitle,
+            is_leaf,
+            sort_order
+        ) VALUES (
+            #{id},
+            #{parentId},
+            #{name},
+            #{subtitle},
+            #{leaf},
+            #{sortOrder}
+        )
+    </insert>
+
+    <update id="updateLeaf">
+        UPDATE category
+        SET is_leaf = #{leaf}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM category
+        WHERE id = #{id}
+    </delete>
 </mapper>

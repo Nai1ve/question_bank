@@ -90,4 +90,27 @@
         ORDER BY created_at DESC, id DESC
         LIMIT 1
     </select>
+
+    <select id="selectLatestByPlanDayIdStudentIdAndMode" resultMap="ReciteDayRecordMap">
+        SELECT
+            id,
+            plan_day_id,
+            plan_id,
+            student_id,
+            book_name,
+            day_label,
+            mode,
+            total_count,
+            correct_count,
+            wrong_count,
+            accuracy,
+            answers_json,
+            created_at
+        FROM recite_day_record
+        WHERE plan_day_id = #{planDayId}
+          AND student_id = #{studentId}
+          AND mode = #{mode}
+        ORDER BY created_at DESC, id DESC
+        LIMIT 1
+    </select>
 </mapper>

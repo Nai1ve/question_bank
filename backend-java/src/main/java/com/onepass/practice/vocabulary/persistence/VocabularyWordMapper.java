@@ -14,4 +14,8 @@ public interface VocabularyWordMapper {
             @Param("startSortOrder") Integer startSortOrder,
             @Param("endSortOrder") Integer endSortOrder
     );
+
+    int deleteByBookId(@Param("bookId") String bookId);
+
+    int insert(VocabularyWordDO item);
 }

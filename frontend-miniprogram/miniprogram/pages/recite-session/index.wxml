@@ -5,14 +5,22 @@
   </view>
 
   <view wx:if="{{session}}" class="surface-card session-summary">
-    <view class="session-title font-title">{{session.bookName}} · {{session.dayLabel}}</view>
-    <view class="muted-text content-copy">{{session.mode === 'cn_to_en' ? '中译英模式' : '英译中模式'}} · 共 {{session.totalCount}} 个</view>
+    <view class="session-summary-top">
+      <view>
+        <view class="session-title font-title">{{session.bookName}}</view>
+        <view class="muted-text content-copy">{{session.dayLabel}} · 共 {{session.totalCount}} 个</view>
+      </view>
+      <view class="session-mode">{{session.mode === 'cn_to_en' ? '中译英' : '英译中'}}</view>
+    </view>
   </view>
 
   <view class="entry-list">
     <view wx:for="{{entries}}" wx:key="wordId" class="surface-card entry-card">
-      <view class="entry-prompt content-copy">{{item.prompt}}</view>
-      <view wx:if="{{item.partOfSpeech}}" class="entry-pos">{{item.partOfSpeech}}</view>
+      <view class="entry-header">
+        <view class="entry-index">{{index + 1}}</view>
+        <view class="entry-prompt content-copy">{{item.prompt}}</view>
+        <view wx:if="{{item.partOfSpeech}}" class="entry-pos">{{item.partOfSpeech}}</view>
+      </view>
       <input
         class="entry-input"
         placeholder="{{placeholderText}}"

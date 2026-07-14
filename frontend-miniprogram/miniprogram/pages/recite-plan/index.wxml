@@ -5,10 +5,31 @@
   </view>
 
   <view wx:if="{{activePlan}}" class="surface-card current-plan-card">
-    <view class="card-title content-copy">当前计划</view>
-    <view class="current-plan-name font-title">{{activePlan.bookName}}</view>
-    <view class="muted-text content-copy">当前进度：{{activePlan.currentDayLabel}} · 已完成 {{activePlan.completedDays}} / {{activePlan.totalDays}} 天</view>
-    <button class="ghost-button card-button" bindtap="handleOpenDays">查看 Day 列表</button>
+    <view class="current-plan-topline">
+      <view>
+        <view class="card-title content-copy">当前计划</view>
+        <view class="current-plan-name font-title">{{activePlan.bookName}}</view>
+      </view>
+      <view class="plan-percent font-title">{{activePlan.progressPercent}}%</view>
+    </view>
+    <view class="plan-progress-track">
+      <view class="plan-progress-fill" style="{{activePlan.progressStyle}}"></view>
+    </view>
+    <view class="current-plan-meta">
+      <view class="plan-meta-item">
+        <view class="plan-meta-value font-title">{{activePlan.currentDayLabel}}</view>
+        <view class="plan-meta-label content-copy">当前进度</view>
+      </view>
+      <view class="plan-meta-item">
+        <view class="plan-meta-value font-title">{{activePlan.completedDays}} / {{activePlan.totalDays}}</view>
+        <view class="plan-meta-label content-copy">完成 Day</view>
+      </view>
+      <view class="plan-meta-item">
+        <view class="plan-meta-value font-title">{{activePlan.dailyCount}}</view>
+        <view class="plan-meta-label content-copy">每日单词</view>
+      </view>
+    </view>
+    <button class="ghost-button card-button" bindtap="handleOpenDays">进入 Day 列表</button>
   </view>
 
   <view class="section-heading font-title">选择词库</view>
@@ -20,9 +41,12 @@
       data-id="{{item.id}}"
       bindtap="handleSelectBook"
     >
-      <view class="book-name font-title">{{item.name}}</view>
+      <view class="book-card-header">
+        <view class="book-name font-title">{{item.name}}</view>
+        <view class="book-count">{{item.totalWords}}</view>
+      </view>
       <view class="book-description content-copy">{{item.description}}</view>
-      <view class="muted-text content-copy">共 {{item.totalWords}} 个单词</view>
+      <view class="book-meta content-copy">共 {{item.totalWords}} 个单词</view>
     </view>
   </view>
 

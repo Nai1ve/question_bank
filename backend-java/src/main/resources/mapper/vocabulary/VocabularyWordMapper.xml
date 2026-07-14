@@ -30,4 +30,21 @@
           AND sort_order &lt;= #{endSortOrder}
         ORDER BY sort_order ASC, id ASC
     </select>
+
+    <delete id="deleteByBookId">
+        DELETE FROM vocabulary_word
+        WHERE book_id = #{bookId}
+    </delete>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO vocabulary_word (book_id, english, chinese, part_of_speech, sort_order, status)
+        VALUES (
+            #{bookId},
+            #{english},
+            #{chinese},
+            #{partOfSpeech},
+            #{sortOrder},
+            1
+        )
+    </insert>
 </mapper>

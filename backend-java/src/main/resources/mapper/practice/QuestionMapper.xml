@@ -19,4 +19,24 @@
         WHERE status = 1
         ORDER BY category_id ASC, sort_order ASC, id ASC
     </select>
+
+    <insert id="insert">
+        INSERT INTO question (
+            id,
+            category_id,
+            question_type,
+            stem,
+            analysis,
+            sort_order,
+            status
+        ) VALUES (
+            #{id},
+            #{categoryId},
+            #{questionType},
+            #{stem},
+            #{analysis},
+            #{sortOrder},
+            1
+        )
+    </insert>
 </mapper>

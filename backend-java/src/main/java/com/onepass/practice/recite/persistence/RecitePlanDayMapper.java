@@ -32,4 +32,13 @@ public interface RecitePlanDayMapper {
             @Param("lastWrongCount") Integer lastWrongCount,
             @Param("completedAt") LocalDateTime completedAt
     );
+
+    int updateLatestResult(
+            @Param("id") Long id,
+            @Param("status") String status,
+            @Param("lastAccuracy") String lastAccuracy,
+            @Param("lastCorrectCount") Integer lastCorrectCount,
+            @Param("lastWrongCount") Integer lastWrongCount,
+            @Param("studyCompletedAt") LocalDateTime studyCompletedAt
+    );
 }

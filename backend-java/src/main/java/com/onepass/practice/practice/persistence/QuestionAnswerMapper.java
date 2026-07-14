@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface QuestionAnswerMapper {
 
     List<QuestionAnswerDO> selectAll();
+
+    int insert(QuestionAnswerDO item);
 }

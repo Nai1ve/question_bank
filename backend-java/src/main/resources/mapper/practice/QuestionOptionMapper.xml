@@ -17,4 +17,18 @@
         FROM question_option
         ORDER BY question_id ASC, sort_order ASC, option_key ASC
     </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO question_option (
+            question_id,
+            option_key,
+            content,
+            sort_order
+        ) VALUES (
+            #{questionId},
+            #{optionKey},
+            #{content},
+            #{sortOrder}
+        )
+    </insert>
 </mapper>

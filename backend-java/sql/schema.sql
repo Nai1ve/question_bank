@@ -1,10 +1,157 @@
 CREATE TABLE IF NOT EXISTS student (
-    id BIGINT UNSIGNED NOT NULL PRIMARY KEY,
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    wechat_openid VARCHAR(128) NULL,
+    wechat_unionid VARCHAR(128) NULL,
     display_name VARCHAR(128) NOT NULL,
     avatar_url VARCHAR(255) NOT NULL DEFAULT '',
     created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-    updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)
+    updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    UNIQUE KEY uk_student_wechat_openid (wechat_openid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+SET @has_fk_recite_plan_student := (
+    SELECT COUNT(*)
+    FROM information_schema.TABLE_CONSTRAINTS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'recite_plan'
+      AND CONSTRAINT_NAME = 'fk_recite_plan_student'
+      AND CONSTRAINT_TYPE = 'FOREIGN KEY'
+);
+SET @drop_fk_recite_plan_student_sql := IF(
+    @has_fk_recite_plan_student > 0,
+    'ALTER TABLE recite_plan DROP FOREIGN KEY fk_recite_plan_student',
+    'SELECT 1'
+);
+PREPARE drop_fk_recite_plan_student_stmt FROM @drop_fk_recite_plan_student_sql;
+EXECUTE drop_fk_recite_plan_student_stmt;
+DEALLOCATE PREPARE drop_fk_recite_plan_student_stmt;
+
+SET @has_fk_recite_day_record_student := (
+    SELECT COUNT(*)
+    FROM information_schema.TABLE_CONSTRAINTS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'recite_day_record'
+      AND CONSTRAINT_NAME = 'fk_recite_day_record_student'
+      AND CONSTRAINT_TYPE = 'FOREIGN KEY'
+);
+SET @drop_fk_recite_day_record_student_sql := IF(
+    @has_fk_recite_day_record_student > 0,
+    'ALTER TABLE recite_day_record DROP FOREIGN KEY fk_recite_day_record_student',
+    'SELECT 1'
+);
+PREPARE drop_fk_recite_day_record_student_stmt FROM @drop_fk_recite_day_record_student_sql;
+EXECUTE drop_fk_recite_day_record_student_stmt;
+DEALLOCATE PREPARE drop_fk_recite_day_record_student_stmt;
+
+SET @student_id_extra := (
+    SELECT EXTRA
+    FROM information_schema.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'student'
+      AND COLUMN_NAME = 'id'
+);
+SET @student_id_auto_sql := IF(
+    @student_id_extra IS NOT NULL AND LOCATE('auto_increment', @student_id_extra) = 0,
+    'ALTER TABLE student MODIFY COLUMN id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT',
+    'SELECT 1'
+);
+PREPARE student_id_auto_stmt FROM @student_id_auto_sql;
+EXECUTE student_id_auto_stmt;
+DEALLOCATE PREPARE student_id_auto_stmt;
+
+SET @has_recite_plan_table := (
+    SELECT COUNT(*)
+    FROM information_schema.TABLES
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'recite_plan'
+);
+SET @has_fk_recite_plan_student_after := (
+    SELECT COUNT(*)
+    FROM information_schema.TABLE_CONSTRAINTS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'recite_plan'
+      AND CONSTRAINT_NAME = 'fk_recite_plan_student'
+      AND CONSTRAINT_TYPE = 'FOREIGN KEY'
+);
+SET @add_fk_recite_plan_student_sql := IF(
+    @has_recite_plan_table > 0 AND @has_fk_recite_plan_student_after = 0,
+    'ALTER TABLE recite_plan ADD CONSTRAINT fk_recite_plan_student FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE RESTRICT',
+    'SELECT 1'
+);
+PREPARE add_fk_recite_plan_student_stmt FROM @add_fk_recite_plan_student_sql;
+EXECUTE add_fk_recite_plan_student_stmt;
+DEALLOCATE PREPARE add_fk_recite_plan_student_stmt;
+
+SET @has_recite_day_record_table := (
+    SELECT COUNT(*)
+    FROM information_schema.TABLES
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'recite_day_record'
+);
+SET @has_fk_recite_day_record_student_after := (
+    SELECT COUNT(*)
+    FROM information_schema.TABLE_CONSTRAINTS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'recite_day_record'
+      AND CONSTRAINT_NAME = 'fk_recite_day_record_student'
+      AND CONSTRAINT_TYPE = 'FOREIGN KEY'
+);
+SET @add_fk_recite_day_record_student_sql := IF(
+    @has_recite_day_record_table > 0 AND @has_fk_recite_day_record_student_after = 0,
+    'ALTER TABLE recite_day_record ADD CONSTRAINT fk_recite_day_record_student FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE RESTRICT',
+    'SELECT 1'
+);
+PREPARE add_fk_recite_day_record_student_stmt FROM @add_fk_recite_day_record_student_sql;
+EXECUTE add_fk_recite_day_record_student_stmt;
+DEALLOCATE PREPARE add_fk_recite_day_record_student_stmt;
+
+SET @has_student_wechat_openid := (
+    SELECT COUNT(*)
+    FROM information_schema.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'student'
+      AND COLUMN_NAME = 'wechat_openid'
+);
+SET @student_wechat_openid_sql := IF(
+    @has_student_wechat_openid = 0,
+    'ALTER TABLE student ADD COLUMN wechat_openid VARCHAR(128) NULL AFTER id',
+    'SELECT 1'
+);
+PREPARE student_wechat_openid_stmt FROM @student_wechat_openid_sql;
+EXECUTE student_wechat_openid_stmt;
+DEALLOCATE PREPARE student_wechat_openid_stmt;
+
+SET @has_student_wechat_unionid := (
+    SELECT COUNT(*)
+    FROM information_schema.COLUMNS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'student'
+      AND COLUMN_NAME = 'wechat_unionid'
+);
+SET @student_wechat_unionid_sql := IF(
+    @has_student_wechat_unionid = 0,
+    'ALTER TABLE student ADD COLUMN wechat_unionid VARCHAR(128) NULL AFTER wechat_openid',
+    'SELECT 1'
+);
+PREPARE student_wechat_unionid_stmt FROM @student_wechat_unionid_sql;
+EXECUTE student_wechat_unionid_stmt;
+DEALLOCATE PREPARE student_wechat_unionid_stmt;
+
+SET @has_student_wechat_openid_key := (
+    SELECT COUNT(*)
+    FROM information_schema.STATISTICS
+    WHERE TABLE_SCHEMA = DATABASE()
+      AND TABLE_NAME = 'student'
+      AND INDEX_NAME = 'uk_student_wechat_openid'
+);
+SET @student_wechat_openid_key_sql := IF(
+    @has_student_wechat_openid_key = 0,
+    'ALTER TABLE student ADD UNIQUE KEY uk_student_wechat_openid (wechat_openid)',
+    'SELECT 1'
+);
+PREPARE student_wechat_openid_key_stmt FROM @student_wechat_openid_key_sql;
+EXECUTE student_wechat_openid_key_stmt;
+DEALLOCATE PREPARE student_wechat_openid_key_stmt;
 
 CREATE TABLE IF NOT EXISTS category (
     id VARCHAR(64) NOT NULL PRIMARY KEY,
@@ -79,6 +226,75 @@ CREATE TABLE IF NOT EXISTS question_answer (
     CONSTRAINT fk_question_answer_question
         FOREIGN KEY (question_id) REFERENCES question(id)
         ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS question_import_batch (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    batch_id VARCHAR(64) NOT NULL,
+    original_filename VARCHAR(255) NOT NULL,
+    status VARCHAR(32) NOT NULL,
+    storage_dir VARCHAR(512) NOT NULL,
+    markdown_path VARCHAR(512) NOT NULL,
+    total_count INT NOT NULL DEFAULT 0,
+    supported_count INT NOT NULL DEFAULT 0,
+    unsupported_count INT NOT NULL DEFAULT 0,
+    error_count INT NOT NULL DEFAULT 0,
+    warning_count INT NOT NULL DEFAULT 0,
+    imported_count INT NOT NULL DEFAULT 0,
+    error_report_json JSON NOT NULL,
+    created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    imported_at DATETIME(3) NULL,
+    canceled_at DATETIME(3) NULL,
+    UNIQUE KEY uk_question_import_batch_id (batch_id),
+    KEY idx_question_import_batch_status_created (status, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS question_import_item (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    batch_id VARCHAR(64) NOT NULL,
+    item_order INT NOT NULL,
+    source_question_no VARCHAR(32) NULL,
+    question_type VARCHAR(64) NOT NULL,
+    normalized_question_type VARCHAR(32) NULL,
+    category_path VARCHAR(255) NOT NULL,
+    status VARCHAR(32) NOT NULL,
+    errors_json JSON NOT NULL,
+    warnings_json JSON NOT NULL,
+    parsed_json JSON NOT NULL,
+    markdown_block MEDIUMTEXT NOT NULL,
+    target_question_id VARCHAR(64) NULL,
+    created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    updated_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+    UNIQUE KEY uk_question_import_item_order (batch_id, item_order),
+    KEY idx_question_import_item_batch_status (batch_id, status),
+    CONSTRAINT fk_question_import_item_batch
+        FOREIGN KEY (batch_id) REFERENCES question_import_batch(batch_id)
+        ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS question_asset (
+    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    batch_id VARCHAR(64) NOT NULL,
+    import_item_id BIGINT UNSIGNED NULL,
+    question_id VARCHAR(64) NULL,
+    asset_type VARCHAR(32) NOT NULL,
+    original_name VARCHAR(255) NOT NULL,
+    relative_path VARCHAR(512) NOT NULL,
+    content_type VARCHAR(128) NOT NULL,
+    file_size BIGINT NOT NULL DEFAULT 0,
+    created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    KEY idx_question_asset_batch (batch_id),
+    KEY idx_question_asset_question (question_id),
+    CONSTRAINT fk_question_asset_batch
+        FOREIGN KEY (batch_id) REFERENCES question_import_batch(batch_id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_question_asset_item
+        FOREIGN KEY (import_item_id) REFERENCES question_import_item(id)
+        ON DELETE SET NULL,
+    CONSTRAINT fk_question_asset_question
+        FOREIGN KEY (question_id) REFERENCES question(id)
+        ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS student_dashboard_template (

@@ -1,57 +1,50 @@
-# Iteration 002 Boundary
+# Iteration 003 Boundary
 
-- 迭代编号：`iteration-002`
-- 版本目标：`v0.3.0-student-test-baseline`
+- 迭代编号：`iteration-003`
+- 版本目标：`v0.4.0-question-import-baseline`
 - 迭代状态：`active`
-- 起始日期：`2026-04-30`
+- 起始日期：`2026-05-07`
 
 ## 当前边界
 
-- 将学生端联调口径统一到真实 MySQL，`dev` 默认不再落回 mock
-- 建立稳定、可重复重置的学生端测试基线
-- 保证首页、我的页、题库、普通刷题、TopXX、错题本、词库、背诵计划、Day 列表、默写、复盘全部可测
-- 以 `sql/schema.sql + sql/seed.sql + sql/reset-student-test-baseline.sql` 维护数据库测试基线
-- 将 Harness 反馈统一收口到 `feedback-inbox.md`，已处理内容归档
-- 收口学生端样式、背诵学习态、自定义 TabBar、容器化部署与本地 git 定稿
+- 建立运营可用的题目上传入口：`docx -> 标准 Markdown -> 预览校验 -> 确认导入 MySQL`
+- 第一版只支持 `.docx`，旧 `.doc` 先转成 `.docx`
+- 支持正式入库题型：`单选 / 多选 / 不定项选择 / 判断题`
+- `简答 / 填空 / 材料题` 先解析识别并进入导入报告，不进入学生刷题主链路
+- 管理入口采用后端内置页面，不建设教师端 SaaS
+- 导入文件与图片先存本地文件系统，通过 `IMPORT_STORAGE_ROOT` 可配置
+- 导入确认前只写 import 表，不污染正式题库
 
 ## 本轮明确做了什么
 
-- `dev` profile 默认切到真实 MySQL，mock 只保留显式 override
-- 补齐词库、背诵计划、背诵记录、错题统计测试数据
-- 将题库、错题榜、错题本、词库、背诵主链路全部对齐到真实数据口径
-- 将刷题接口从写死学生 `1001` 改为 JWT 学生鉴权
-- 固定测试学生为 `1001 / 微信用户`
-- 建立统一测试清单与固定测试数据文档
-- 增加本地测试基线重置脚本
-- 将待处理反馈与已处理归档从旧 `bug-feedback.md` 拆分
-- 补齐背诵学习页、学习完成接口、最近一次结果回看与 Day 三态展示
-- 将原生 tabBar 切为自定义 TabBar，并统一标题/正文字体与底部安全区
-- 为后端补齐 `Dockerfile / docker-compose.yml / .env.example`
+- 更新题目导入规范，明确标准 Markdown 字段、支持题型、校验规则和资产处理方式
+- 增加导入批次、题块、资产表，并纳入测试基线 reset
+- 增加 docx 解析、Markdown 生成、Markdown 校验、确认导入服务
+- 增加内部管理页 `/admin/import/questions`
+- 增加管理导入 API 和 `APP_ADMIN_IMPORT_TOKEN` 轻量保护
+- 导入分类改为叶子分类下拉选择，并提供内部分类新增/删除接口
+- 增加导入题目图片访问接口，确认导入时将图片链接改写为学生端可访问地址
+- 前端刷题页兼容 `indefinite / judge` 题型展示和单选行为
+- 前端刷题页和统计页支持题干/解析/选项中的 Markdown 图片节点渲染
 
 ## 本轮不做
 
-- Markdown 导入
 - 真实微信登录联调
 - TopXX 模型分析与错因推断
 - 教师端、支付、AI 判题
+- `.doc` 直接解析
+- 材料题子题进入学生刷题主链路
+- 对象存储、异步任务中心、复杂导入权限系统
 
 ## 验收标准
 
-- 启动后端 `dev` 时，不额外传 mock 开关也能返回：
-  - `GET /api/student/vocabulary/books`
-  - `GET /api/student/wrong-book`
-  - `GET /api/student/recite/plans/active`
-- 小程序首页 4 个入口都能进入真实页面
-- 我的页 3 个入口都能进入真实页面
-- 普通刷题支持标签、即时反馈、统一反馈、继续上次练习、重新开始
-- TopXX 支持榜单范围与三级分类筛选
-- 错题本按累计答错次数排序展示真实列表，并能跳转 TopXX
-- 背诵支持：
-  - 词库列表
-  - 激活计划
-  - Day 列表
-  - 学习页
-  - 默写
-  - 复盘
-- 统一测试前可通过一次基线重置恢复固定数据状态
-- 当前待处理问题只看 `feedback-inbox.md`
+- `GET /admin/import/questions` 能打开管理页
+- 导入分类下拉能列出当前叶子分类
+- 能新增分类路径，能删除空叶子分类，不能删除已有题目的分类
+- 使用正确 token 上传 `101-10.docx` 后能生成 Markdown 与批次报告
+- 使用正确 token 上传 `import_question.docx` 后能识别支持题型和暂不支持题型
+- 分类不存在或非叶子分类时报错
+- 答案不在选项内、缺少答案等问题能定位到题块
+- 确认导入后，支持题型写入正式题库表
+- 带图题确认导入后，普通刷题接口返回可访问图片链接
+- 重跑 `reset-student-test-baseline.sql + seed.sql` 后可恢复学生端测试基线

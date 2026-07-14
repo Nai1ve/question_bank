@@ -1,4 +1,5 @@
 const { getPracticeSummary } = require('../../services/practice');
+const { buildContentNodes } = require('../../utils/content');
 
 function decorateSummary(summary) {
   return {
@@ -7,6 +8,8 @@ function decorateSummary(summary) {
     questionResults: (summary.questionResults || []).map((item) => ({
       ...item,
       badgeLabel: item.correct ? '正确' : '错误',
+      stemNodes: buildContentNodes(item.stem),
+      analysisNodes: buildContentNodes(item.analysis),
       badgeClassName: item.correct ? 'result-badge result-badge-correct' : 'result-badge result-badge-wrong'
     }))
   };

@@ -114,4 +114,15 @@
             completed_at = #{completedAt}
         WHERE id = #{id}
     </update>
+
+    <update id="updateLatestResult">
+        UPDATE recite_plan_day
+        SET status = #{status},
+            study_completed_at = COALESCE(study_completed_at, #{studyCompletedAt}),
+            last_accuracy = #{lastAccuracy},
+            last_correct_count = #{lastCorrectCount},
+            last_wrong_count = #{lastWrongCount},
+            completed_at = NULL
+        WHERE id = #{id}
+    </update>
 </mapper>

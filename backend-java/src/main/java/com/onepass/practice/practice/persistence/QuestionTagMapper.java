@@ -9,6 +9,8 @@ public interface QuestionTagMapper {
 
     List<QuestionTagDO> selectAll();
 
+    int insert(QuestionTagDO item);
+
     List<QuestionTagSummaryDO> selectAllTagSummaries();
 
     List<QuestionTagSummaryDO> selectTagSummariesByCategoryIds(@Param("categoryIds") List<String> categoryIds);

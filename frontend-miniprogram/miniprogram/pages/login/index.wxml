@@ -5,21 +5,14 @@
   <view class="login-body">
     <view class="login-topline font-title">登录</view>
 
-    <view class="hero-row">
-      <view>
-        <view class="hero-title font-title">登录</view>
-        <view class="brand-text font-title">「一把过」</view>
-      </view>
-      <view class="mascot-shell">
-        <view class="mascot-head">
-          <view class="eye left-eye"></view>
-          <view class="eye right-eye"></view>
-        </view>
-        <view class="mascot-body">Buff</view>
-      </view>
+    <view class="buff-stage">
+      <image class="buff-image" src="/assets/images/buff.png" mode="aspectFit" />
     </view>
 
-    <view class="login-copy content-copy">首版仅支持微信登录，完成 mock 闭环后再切真实微信联调。</view>
+    <view class="hero-copy">
+      <view class="hero-title font-title">登录</view>
+      <view class="brand-text font-title">「一把过」</view>
+    </view>
 
     <button class="wechat-button" loading="{{loading}}" bindtap="handleWechatLogin">{{loginButtonText}}</button>
   </view>

@@ -2,22 +2,24 @@
 
 ## In Progress
 
-- 按定稿收口清单回归学生端全链路
-- 验证自定义 TabBar、字体、安全区、背诵学习态与容器部署都符合当前版本边界
-- 用 `sql/reset-student-test-baseline.sql + sql/seed.sql` 反复验证测试基线是否可重复恢复
+- 实现并验证 `docx -> Markdown -> MySQL` 题目导入基线
+- 用 `docs/prototypes/questions/101-10.docx` 验证真题导入
+- 用 `docs/prototypes/questions/import_question.docx` 验证多题型识别和暂不支持报告
 
 ## Next
 
-- 根据统一测试结果整理新的待处理反馈，只写入 `feedback-inbox.md`
-- 校验普通刷题在“已答题跳过”规则下，各叶子分类是否仍有足够题量
-- 校验 TopXX 和错题本排序是否与 `student-test-data.md` 保持一致
-- 校验重建背诵计划后，旧计划是否正确转为 `SUPERSEDED`
-- 校验 Docker Compose 下 `mysql + backend` 是否可直接启动
-- 持续维护 `schema.sql / seed.sql / reset-student-test-baseline.sql / student-test-data.md`
-- 将学生看板文本模板逐步替换为更真实的统计数据模型
+- 管理页上传、预览、下载 Markdown、确认导入、取消批次联调
+- 管理页分类下拉、新增空分类、删除空分类联调
+- 确认导入后的题目能进入普通刷题链路
+- 带图题在练习页和统计页继续做小程序真机/开发者工具视觉复验
+- 导入错误报告字段继续根据运营 docx 样例补齐
+- 评估 `.doc -> .docx` 的人工流程或后续脚本方案
+- 持续维护 `schema.sql / seed.sql / reset-student-test-baseline.sql / 05-content-import-spec.md`
 
 ## Deferred
 
 - 真实微信登录联调
-- Markdown 导入工作流
 - TopXX 定期模型分析、错因总结与练后展示
+- `.doc` 直接解析
+- 材料题子题进入学生刷题主链路
+- 题目导入异步任务中心

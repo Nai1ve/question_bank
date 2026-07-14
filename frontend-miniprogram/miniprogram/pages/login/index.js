@@ -56,15 +56,21 @@ Page({
   },
 
   fetchWechatCode() {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       if (typeof wx.login !== 'function') {
-        resolve('mock-wechat-code');
+        reject(new Error('当前环境不支持微信登录'));
         return;
       }
 
       wx.login({
-        success: (res) => resolve(res.code || 'mock-wechat-code'),
-        fail: () => resolve('mock-wechat-code')
+        success: (res) => {
+          if (res.code) {
+            resolve(res.code);
+            return;
+          }
+          reject(new Error('未获取到微信登录凭证'));
+        },
+        fail: () => reject(new Error('微信登录凭证获取失败'))
       });
     });
   }

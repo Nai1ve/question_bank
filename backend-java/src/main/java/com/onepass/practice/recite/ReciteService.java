@@ -53,7 +53,7 @@ public class ReciteService {
     public ReciteActivePlanView getActivePlan(Long studentId) {
         requirePersistence();
         RecitePlanDO plan = recitePlanMapper.selectActiveByStudentId(studentId);
-        return plan == null ? null : toActivePlanView(plan);
+        return plan == null ? null : toActivePlanView(studentId, plan);
     }
 
     public RecitePlanCreateResponse createPlan(Long studentId, RecitePlanCreateRequest request) {
@@ -104,7 +104,7 @@ public class ReciteService {
                 .sorted(Comparator.comparing(RecitePlanDayDO::getDayNumber))
                 .map(item -> toDayView(studentId, item))
                 .toList();
-        return new RecitePlanDaysResponse(toActivePlanView(plan), days);
+        return new RecitePlanDaysResponse(toActivePlanView(studentId, plan), days);
     }
 
     public ReciteStudyView getStudy(Long studentId, Long planId, Integer dayNumber) {
@@ -148,7 +148,8 @@ public class ReciteService {
         RecitePlanDO plan = requirePlan(studentId, planId);
         RecitePlanDayDO day = requirePlanDay(planId, dayNumber);
         ReciteMode mode = ReciteMode.fromValue(modeValue);
-        if (!"COMPLETED".equals(day.getStatus()) && day.getStudyCompletedAt() == null) {
+        ReciteModeRecords modeRecords = loadModeRecords(studentId, day);
+        if (day.getStudyCompletedAt() == null && !modeRecords.anyCompleted()) {
             throw new AppException("请先完成学习再开始测试");
         }
         List<VocabularyWordDO> words = vocabularyWordMapper.selectByBookIdAndSortRange(
@@ -237,14 +238,27 @@ public class ReciteService {
         record.setAnswersJson(writeJson(items));
         reciteDayRecordMapper.insert(record);
 
-        recitePlanDayMapper.updateCompletion(
-                day.getId(),
-                "COMPLETED",
-                accuracy,
-                correctCount,
-                wrongCount,
-                LocalDateTime.now()
-        );
+        LocalDateTime now = LocalDateTime.now();
+        ReciteModeRecords modeRecords = loadModeRecords(studentId, day);
+        if (modeRecords.fullyCompleted()) {
+            recitePlanDayMapper.updateCompletion(
+                    day.getId(),
+                    "COMPLETED",
+                    accuracy,
+                    correctCount,
+                    wrongCount,
+                    now
+            );
+        } else {
+            recitePlanDayMapper.updateLatestResult(
+                    day.getId(),
+                    "PENDING",
+                    accuracy,
+                    correctCount,
+                    wrongCount,
+                    now
+            );
+        }
 
         return new ReciteSubmitResponse(record.getId(), totalCount, correctCount, wrongCount, accuracy);
     }
@@ -278,20 +292,21 @@ public class ReciteService {
         }
 
         List<RecitePlanDayDO> days = recitePlanDayMapper.selectByPlanId(plan.getId());
-        RecitePlanDayDO pendingDay = days.stream()
-                .filter(day -> !"COMPLETED".equals(day.getStatus()))
-                .min(Comparator.comparing(RecitePlanDayDO::getDayNumber))
-                .orElse(null);
+        RecitePlanDayDO pendingDay = findFirstIncompleteDay(studentId, days);
         return plan.getBookName() + " · " + (pendingDay == null ? "已完成" : pendingDay.getDayLabel());
     }
 
-    private ReciteActivePlanView toActivePlanView(RecitePlanDO plan) {
-        int completedDays = recitePlanDayMapper.countCompletedDays(plan.getId());
+    private ReciteActivePlanView toActivePlanView(Long studentId, RecitePlanDO plan) {
         List<RecitePlanDayDO> days = recitePlanDayMapper.selectByPlanId(plan.getId());
-        RecitePlanDayDO pendingDay = days.stream()
-                .filter(item -> !"COMPLETED".equals(item.getStatus()))
-                .min(Comparator.comparing(RecitePlanDayDO::getDayNumber))
-                .orElse(null);
+        int completedDays = 0;
+        RecitePlanDayDO pendingDay = null;
+        for (RecitePlanDayDO day : days.stream().sorted(Comparator.comparing(RecitePlanDayDO::getDayNumber)).toList()) {
+            if (loadModeRecords(studentId, day).fullyCompleted()) {
+                completedDays += 1;
+            } else if (pendingDay == null) {
+                pendingDay = day;
+            }
+        }
 
         return new ReciteActivePlanView(
                 plan.getId(),
@@ -308,25 +323,75 @@ public class ReciteService {
 
     private RecitePlanDayView toDayView(Long studentId, RecitePlanDayDO item) {
         ReciteDayRecordDO latestRecord = reciteDayRecordMapper.selectLatestByPlanDayIdAndStudentId(item.getId(), studentId);
+        ReciteModeRecords modeRecords = loadModeRecords(studentId, item);
         return new RecitePlanDayView(
                 item.getDayNumber() == null ? 0 : item.getDayNumber(),
                 item.getDayLabel(),
                 item.getTotalCount() == null ? 0 : item.getTotalCount(),
-                resolveDayStatus(item),
-                item.getStudyCompletedAt() != null,
+                resolveDayStatus(item, modeRecords),
+                item.getStudyCompletedAt() != null || modeRecords.anyCompleted(),
                 latestRecord == null ? null : latestRecord.getId(),
                 latestRecord == null ? null : latestRecord.getMode(),
-                item.getLastAccuracy(),
-                item.getLastCorrectCount(),
-                item.getLastWrongCount()
+                latestRecord == null ? item.getLastAccuracy() : latestRecord.getAccuracy(),
+                latestRecord == null ? item.getLastCorrectCount() : latestRecord.getCorrectCount(),
+                latestRecord == null ? item.getLastWrongCount() : latestRecord.getWrongCount(),
+                modeRecords.cnToEnCompleted(),
+                modeRecords.cnToEn() == null ? null : modeRecords.cnToEn().getId(),
+                modeRecords.cnToEn() == null ? null : modeRecords.cnToEn().getAccuracy(),
+                modeRecords.enToCnCompleted(),
+                modeRecords.enToCn() == null ? null : modeRecords.enToCn().getId(),
+                modeRecords.enToCn() == null ? null : modeRecords.enToCn().getAccuracy()
         );
     }
 
-    private String resolveDayStatus(RecitePlanDayDO item) {
-        if ("COMPLETED".equals(item.getStatus())) {
+    private String resolveDayStatus(RecitePlanDayDO item, ReciteModeRecords modeRecords) {
+        if (modeRecords.fullyCompleted()) {
             return "COMPLETED";
         }
-        return item.getStudyCompletedAt() == null ? "PENDING_STUDY" : "PENDING_TEST";
+        return item.getStudyCompletedAt() == null && !modeRecords.anyCompleted() ? "PENDING_STUDY" : "PENDING_TEST";
+    }
+
+    private RecitePlanDayDO findFirstIncompleteDay(Long studentId, List<RecitePlanDayDO> days) {
+        return days.stream()
+                .sorted(Comparator.comparing(RecitePlanDayDO::getDayNumber))
+                .filter(day -> !loadModeRecords(studentId, day).fullyCompleted())
+                .findFirst()
+                .orElse(null);
+    }
+
+    private ReciteModeRecords loadModeRecords(Long studentId, RecitePlanDayDO day) {
+        ReciteDayRecordDO cnToEn = reciteDayRecordMapper.selectLatestByPlanDayIdStudentIdAndMode(
+                day.getId(),
+                studentId,
+                ReciteMode.CN_TO_EN.value()
+        );
+        ReciteDayRecordDO enToCn = reciteDayRecordMapper.selectLatestByPlanDayIdStudentIdAndMode(
+                day.getId(),
+                studentId,
+                ReciteMode.EN_TO_CN.value()
+        );
+        return new ReciteModeRecords(cnToEn, enToCn);
+    }
+
+    private record ReciteModeRecords(
+            ReciteDayRecordDO cnToEn,
+            ReciteDayRecordDO enToCn
+    ) {
+        private boolean cnToEnCompleted() {
+            return cnToEn != null;
+        }
+
+        private boolean enToCnCompleted() {
+            return enToCn != null;
+        }
+
+        private boolean anyCompleted() {
+            return cnToEnCompleted() || enToCnCompleted();
+        }
+
+        private boolean fullyCompleted() {
+            return cnToEnCompleted() && enToCnCompleted();
+        }
     }
 
     private VocabularyBookDO requireBook(String bookId) {

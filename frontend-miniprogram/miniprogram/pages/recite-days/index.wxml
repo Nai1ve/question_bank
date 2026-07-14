@@ -5,8 +5,16 @@
   </view>
 
   <view wx:if="{{plan}}" class="surface-card plan-summary">
-    <view class="plan-name font-title">{{plan.bookName}}</view>
-    <view class="muted-text content-copy">每日 {{plan.dailyCount}} 个 · 共 {{plan.totalDays}} 天 · 当前 {{plan.currentDayLabel}}</view>
+    <view class="plan-summary-top">
+      <view>
+        <view class="plan-name font-title">{{plan.bookName}}</view>
+        <view class="muted-text content-copy">每日 {{plan.dailyCount}} 个 · 共 {{plan.totalDays}} 天</view>
+      </view>
+      <view class="plan-current">
+        <view class="plan-current-value font-title">{{plan.currentDayLabel}}</view>
+        <view class="plan-current-label content-copy">当前</view>
+      </view>
+    </view>
   </view>
 
   <view class="day-list">
@@ -18,12 +26,23 @@
       bindtap="handleOpenDay"
     >
       <view class="day-header">
-        <view class="day-title font-title">{{item.dayLabel}}</view>
+        <view>
+          <view class="day-title font-title">{{item.dayLabel}}</view>
+          <view class="day-subtitle content-copy">单词数 {{item.totalCount}}</view>
+        </view>
         <view class="day-status">{{item.statusText}}</view>
       </view>
-      <view class="muted-text content-copy">单词数：{{item.totalCount}} · {{item.statusText}}</view>
+      <view class="day-progress-track">
+        <view class="day-progress-fill" style="{{item.modeProgressStyle}}"></view>
+      </view>
+      <view class="mode-status-row">
+        <view wx:for="{{item.modeItems}}" wx:for-item="modeItem" wx:key="mode" class="{{modeItem.className}}">
+          <text>{{modeItem.label}}</text>
+          <text class="mode-chip-state">{{modeItem.statusText}}</text>
+        </view>
+      </view>
       <view wx:if="{{item.lastAccuracy}}" class="day-meta content-copy">上次正确率：{{item.lastAccuracy}} · 对 {{item.lastCorrectCount}} / 错 {{item.lastWrongCount}}</view>
-      <view class="day-action">{{item.actionText}}</view>
+      <view class="{{item.actionClass}}">{{item.actionText}}</view>
     </view>
   </view>
 </view>

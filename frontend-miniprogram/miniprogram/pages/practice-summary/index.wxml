@@ -36,10 +36,20 @@
       <view class="result-seq">第 {{item.sequence}} 题</view>
       <view class="{{item.badgeClassName}}">{{item.badgeLabel}}</view>
     </view>
-    <view class="result-stem content-copy">{{item.stem}}</view>
+    <view class="result-stem content-copy content-node-list">
+      <block wx:for="{{item.stemNodes}}" wx:key="id">
+        <text wx:if="{{item.type === 'text'}}">{{item.text}}</text>
+        <image wx:elif="{{item.type === 'image'}}" class="content-image" mode="widthFix" src="{{item.src}}"></image>
+      </block>
+    </view>
     <view class="result-answer content-copy">你的答案：{{item.userAnswerLabel}}</view>
     <view class="result-answer content-copy">标准答案：{{item.standardAnswerLabel}}</view>
-    <view class="result-analysis content-copy">{{item.analysis}}</view>
+    <view class="result-analysis content-copy content-node-list">
+      <block wx:for="{{item.analysisNodes}}" wx:key="id">
+        <text wx:if="{{item.type === 'text'}}">{{item.text}}</text>
+        <image wx:elif="{{item.type === 'image'}}" class="content-image" mode="widthFix" src="{{item.src}}"></image>
+      </block>
+    </view>
   </view>
 
   <view wx:if="{{summary}}" class="summary-action-group">
