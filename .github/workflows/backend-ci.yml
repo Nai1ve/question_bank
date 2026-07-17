@@ -1,0 +1,56 @@
+name: Backend CI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend-java/**"
+      - ".github/workflows/backend-ci.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "backend-java/**"
+      - ".github/workflows/backend-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-build:
+    name: Test And Build Backend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend-java
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+          cache-dependency-path: backend-java/pom.xml
+
+      - name: Run Tests
+        run: mvn -B -ntp test
+
+      - name: Build Package
+        run: mvn -B -ntp -DskipTests package
+
+      - name: Upload Backend Jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: backend-java/target/practice-0.0.1-SNAPSHOT.jar
+          if-no-files-found: error
