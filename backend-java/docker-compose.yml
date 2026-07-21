@@ -4,7 +4,7 @@ services:
     container_name: onepass-mysql
     restart: unless-stopped
     ports:
-      - "${MYSQL_PORT:-3306}:3306"
+      - "${MYSQL_BIND_ADDRESS:-127.0.0.1}:${MYSQL_PORT:-3306}:3306"
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-onepass_practice}
       MYSQL_USER: ${MYSQL_USER:-onepass}
@@ -22,12 +22,17 @@ services:
       - mysql-data:/var/lib/mysql
       - ./sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
       - ./sql/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
-      - ./sql/reset-student-test-baseline.sql:/docker-entrypoint-initdb.d/03-reset-student-test-baseline.sql:ro
+      - ./sql/reset-student-test-baseline.sql:/docker-entrypoint-reset/reset-student-test-baseline.sql:ro
 
   backend:
     build:
       context: .
       dockerfile: Dockerfile
+      target: ${DOCKER_BUILD_TARGET:-local-jar}
+      args:
+        MAVEN_IMAGE: ${MAVEN_IMAGE:-public.ecr.aws/docker/library/maven:3.9.9-eclipse-temurin-17}
+        RUNTIME_IMAGE: ${RUNTIME_IMAGE:-public.ecr.aws/docker/library/eclipse-temurin:17-jre}
+    image: onepass-practice-backend:local
     container_name: onepass-backend
     restart: unless-stopped
     depends_on:
@@ -43,7 +48,17 @@ services:
       APP_JWT_SECRET: ${APP_JWT_SECRET:-replace-with-a-long-random-secret}
       WECHAT_MINI_APP_ID: ${WECHAT_MINI_APP_ID:-replace-me}
       WECHAT_MINI_APP_SECRET: ${WECHAT_MINI_APP_SECRET:-replace-me}
+      APP_CORS_ALLOWED_ORIGINS: ${APP_CORS_ALLOWED_ORIGINS:-*}
       APP_MOCK_ENABLED: ${APP_MOCK_ENABLED:-false}
+      APP_ADMIN_IMPORT_TOKEN: ${APP_ADMIN_IMPORT_TOKEN:-dev-admin-import-token}
+      IMPORT_STORAGE_ROOT: ${IMPORT_STORAGE_ROOT:-/app/import-storage}
+      IMPORT_DEFAULT_CATEGORY_PATH: ${IMPORT_DEFAULT_CATEGORY_PATH:-考研/政治/基础阶段}
+      SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE: ${SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE:-50MB}
+      SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE: ${SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE:-60MB}
+      SERVER_FORWARD_HEADERS_STRATEGY: ${SERVER_FORWARD_HEADERS_STRATEGY:-framework}
+      JAVA_OPTS: ${JAVA_OPTS:--XX:MaxRAMPercentage=75}
+    volumes:
+      - ./import-storage:/app/import-storage
 
 volumes:
   mysql-data:
