@@ -1,6 +1,6 @@
 services:
   mysql:
-    image: mysql:8.4
+    image: ${MYSQL_IMAGE:-mysql:8.4}
     container_name: onepass-mysql
     restart: unless-stopped
     ports:
@@ -28,10 +28,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: ${DOCKER_BUILD_TARGET:-local-jar}
+      target: ${DOCKER_BUILD_TARGET:-packaged}
       args:
         MAVEN_IMAGE: ${MAVEN_IMAGE:-public.ecr.aws/docker/library/maven:3.9.9-eclipse-temurin-17}
         RUNTIME_IMAGE: ${RUNTIME_IMAGE:-public.ecr.aws/docker/library/eclipse-temurin:17-jre}
+        MAVEN_MIRROR_URL: ${MAVEN_MIRROR_URL:-https://maven.aliyun.com/repository/public}
     image: onepass-practice-backend:local
     container_name: onepass-backend
     restart: unless-stopped

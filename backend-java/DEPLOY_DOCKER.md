@@ -39,6 +39,10 @@ docker compose up -d --build
 docker compose logs -f backend
 ```
 
+默认使用 `DOCKER_BUILD_TARGET=packaged`，服务器会在 Docker 构建阶段完成 Maven 打包，不需要提前上传 `target/practice-0.0.1-SNAPSHOT.jar`。
+
+如果服务器已经配置了国内 Docker 镜像源，可以将 `.env` 中的 `MYSQL_IMAGE`、`MAVEN_IMAGE` 和 `RUNTIME_IMAGE` 改为对应镜像地址。`MAVEN_MIRROR_URL` 默认使用阿里云 Maven 公共仓库。
+
 健康检查：
 
 ```bash
